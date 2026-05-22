@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>迷你3D小世界</title>
+  <!-- 使用国内稳定CDN，避免加载失败 -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/three.js/0.158.0/three.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/three.js/0.158.0/controls/OrbitControls.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, sans-serif;
+    }
+
+    body {
+      overflow: hidden;
+      background: #f5f5f5;
+    }
+
+    #app {
+      position: fixed;
+      inset: 0;
+    }
+
+    /* 顶部说明文字 */
+    .top-desc {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      color: #333;
+      z-index: 10;
+      white-space: nowrap;
+    }
+
+    /* 存档栏 */
+    .save-group {
+      position: fixed;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .save-group button {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 20px;
+      background: #eee;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .save-group button.active {
+      background: #4299e1;
+      color: #fff;
+    }
+
+    /* 工具栏 */
+    .tool-group {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .tool-group button {
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+      background: #fff;
+      box-shadow: 0 2px 6px #0002;
+    }
+
+    .tool-group button.active {
+      background: #4299e1;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <div class="top-desc">迷你世界 点击格子放置 · 拖拽旋转 · 滚轮缩放</div>
+
+  <div class="save-group">
+    <button class="save-btn active" data-save="1">存档 1</button>
+    <button class="save-btn" data-save="2">存档 2</button>
+    <button class="save-btn" data-save="3">存档 3</button>
+  </div>
+
+  <div class="tool-group">
+    <button class="tool-btn active" data-type="grass">🌿</button>
+    <button class="tool-btn" data-type="road">🟫</button>
+    <button class="tool-btn" data-type="water">💧</button>
+    <button class="tool-btn" data-type="stone">🪨</button>
+    <button class="tool-btn" data-type="tree">🌳</button>
+    <button class="tool-btn" data-type="house">🏠</button>
+    <button class="tool-btn" data-type="erase">🧹</button>
+  </div>
+
+  <script>
+    // 关键修复：等待Three.js加载完成再初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      const SIZE = 8;
+      let currentTool = 'grass';
+      let currentSave = 1;
+      let world = JSON.parse(localStorage.getItem(`world_${currentSave}`)) || initBlank();
+
+      // Three.js 初始化
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color('#e8f4fc');
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+      camera.position.set(9, 9, 9);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      document.getElementById('app').appendChild(renderer.domElement);
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.minDistance = 4;
+      controls.maxDistance = 18;
+      controls.maxPolarAngle = Math.PI / 2.1;
+
+      // 光照（加强亮度，避免过暗）
+      scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+      dirLight.position.set(6, 12, 6);
+      scene.add(dirLight);
+
+      // 材质
+      const mat = {
+        grass: new THREE.MeshLambertMaterial({ color: 0x66bb6a }),
+        road: new THREE.MeshLambertMaterial({ color: 0xa1887f }),
+        water: new THREE.MeshLambertMaterial({ color: 0x42a5f5 }),
+        stone: new THREE.MeshLambertMaterial({ color: 0x90a4ae }),
+        wood: new THREE.MeshLambertMaterial({ color: 0xb07c4a }),
+        roof: new THREE.MeshLambertMaterial({ color: 0xef5350 }),
+        hover: new THREE.MeshBasicMaterial({ color: 0xffee58, transparent: true, opacity: 0.35 })
+      };
+
+      let tiles = [], objs = [];
+      let hoverMesh;
+
+      // 初始化空草地
+      function initBlank() {
+        let d = [];
+        for (let y = 0; y < SIZE; y++) {
+          let row = [];
+          for (let x = 0; x < SIZE; x++) row.push('grass');
+          d.push(row);
+        }
+        return d;
+      }
+
+      // 清空场景
+      function clearAll() {
+        tiles.forEach(t => scene.remove(t));
+        objs.forEach(o => scene.remove(o));
+        tiles = []; objs = [];
+      }
+
+      // 渲染整个世界
+      function render() {
+        clearAll();
+        for (let y = 0; y < SIZE; y++) {
+          for (let x = 0; x < SIZE; x++) {
+            let g = new THREE.BoxGeometry(1, 0.15, 1);
+            let m = new THREE.Mesh(g, mat[world[y][x]]);
+            m.position.set(x - SIZE / 2 + 0.5, 0, y - SIZE / 2 + 0.5);
+            m.userData = { x, y };
+            scene.add(m);
+            tiles.push(m);
+
+            let type = world[y][x];
+            if (type === 'stone') addStone(x, y);
+            if (type === 'tree') addTree(x, y);
+            if (type === 'house') addHouse(x, y);
+          }
+        }
+        makeHover();
+      }
+
+      // 悬停高亮格子
+      function makeHover() {
+        let g = new THREE.BoxGeometry(1, 0.2, 1);
+        hoverMesh = new THREE.Mesh(g, mat.hover);
+        hoverMesh.visible = false;
+        scene.add(hoverMesh);
+      }
+
+      function addStone(x, y) {
+        let m = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 10), mat.stone);
+        m.position.set(x - SIZE / 2 + 0.5, 0.35, y - SIZE / 2 + 0.5);
+        scene.add(m); objs.push(m);
+      }
+
+      function addTree(x, y) {
+        let trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.7), mat.wood);
+        trunk.position.set(x - SIZE / 2 + 0.5, 0.55, y - SIZE / 2 + 0.5);
+        let leaf = new THREE.Mesh(new THREE.SphereGeometry(0.45), mat.grass);
+        leaf.position.y = 1.1;
+        trunk.add(leaf);
+        scene.add(trunk); objs.push(trunk);
+      }
+
+      function addHouse(x, y) {
+        let body = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.7, 0.7), mat.wood);
+        body.position.set(x - SIZE / 2 + 0.5, 0.45, y - SIZE / 2 + 0.5);
+        let roof = new THREE.Mesh(new THREE.ConeGeometry(0.55, 0.5, 4), mat.roof);
+        roof.position.y = 1.0;
+        body.add(roof);
+        scene.add(body); objs.push(body);
+      }
+
+      // 射线拾取
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      let hoverCell = null;
+
+      window.addEventListener('mousemove', e => {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        let res = raycaster.intersectObjects(tiles);
+        if (res.length) {
+          let { x, y } = res[0].object.userData;
+          hoverCell = { x, y };
+          hoverMesh.position.set(x - SIZE / 2 + 0.5, 0.12, y - SIZE / 2 + 0.5);
+          hoverMesh.visible = true;
+        } else {
+          hoverMesh.visible = false;
+          hoverCell = null;
+        }
+      });
+
+      window.addEventListener('click', () => {
+        if (!hoverCell) return;
+        let { x, y } = hoverCell;
+        world[y][x] = currentTool === 'erase' ? 'grass' : currentTool;
+        save();
+        render();
+      });
+
+      // 存档读写
+      function save() {
+        localStorage.setItem(`world_${currentSave}`, JSON.stringify(world));
+      }
+      function load(id) {
+        currentSave = id;
+        world = JSON.parse(localStorage.getItem(`world_${id}`)) || initBlank();
+        render();
+      }
+
+      // 按钮事件
+      document.querySelectorAll('.tool-btn').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelector('.tool-btn.active').classList.remove('active');
+          btn.classList.add('active');
+          currentTool = btn.dataset.type;
+        };
+      });
+
+      document.querySelectorAll('.save-btn').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelector('.save-btn.active').classList.remove('active');
+          btn.classList.add('active');
+          load(btn.dataset.save);
+        };
+      });
+
+      // 窗口适配
+      window.onresize = () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      };
+
+      // 启动
+      render();
+      (function ani() {
+        requestAnimationFrame(ani);
+        controls.update();
+        renderer.render(scene, camera);
+      })();
+
+    });
+  </script>
+</body>
+
+</html>
