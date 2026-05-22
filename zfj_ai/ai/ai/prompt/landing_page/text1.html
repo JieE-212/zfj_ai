@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodiez - 美味外卖，极速送达</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    :root {
+      --primary: #FF5A1F;
+      /* 主色调：活力橙（外卖行业适配） */
+      --secondary: #212121;
+      --light: #f8f9fa;
+      --gray: #666;
+      --white: #fff;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      color: var(--secondary);
+      line-height: 1.6;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 5%;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      z-index: 999;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .nav-links a {
+      margin-left: 30px;
+      text-decoration: none;
+      color: var(--secondary);
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .download-btn {
+      background: var(--primary);
+      color: white !important;
+      padding: 10px 20px;
+      border-radius: 30px;
+    }
+
+    /* 英雄区 */
+    .hero {
+      margin-top: 80px;
+      padding: 80px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .hero-text {
+      flex: 1 1 450px;
+    }
+
+    .hero-text h1 {
+      font-size: 52px;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: 18px;
+      color: var(--gray);
+      margin-bottom: 30px;
+      max-width: 550px;
+    }
+
+    .app-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .app-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--secondary);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .app-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .hero-img {
+      flex: 1 1 400px;
+      text-align: center;
+    }
+
+    .hero-img img {
+      max-width: 320px;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    /* 功能区 */
+    .features {
+      padding: 100px 5%;
+      background: var(--light);
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+
+    .section-desc {
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto 60px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      padding: 40px 25px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      transition: 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      margin: 15px 0;
+    }
+
+    .feature-card p {
+      color: var(--gray);
+    }
+
+    /* 下载引导区 */
+    .cta {
+      padding: 100px 5%;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .cta p {
+      font-size: 18px;
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    .cta .app-btn {
+      background: white;
+      color: var(--secondary);
+    }
+
+    /* 评价区 */
+    .reviews {
+      padding: 100px 5%;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .review-card {
+      padding: 30px;
+      background: var(--light);
+      border-radius: 15px;
+    }
+
+    .stars {
+      color: #FFC107;
+      margin-bottom: 15px;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .user img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* 页脚 */
+    .footer {
+      padding: 60px 5% 30px;
+      background: var(--secondary);
+      color: white;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col {
+      flex: 1 1 200px;
+    }
+
+    .footer-col h4 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .footer-col a {
+      display: block;
+      color: #ccc;
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+
+    .footer-col a:hover {
+      color: var(--primary);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid #444;
+      color: #888;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .hero-text h1 {
+        font-size: 36px;
+      }
+
+      .nav-links {
+        display: none;
+        /* 移动端可自行扩展汉堡菜单 */
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <a href="#" class="logo">Foodiez</a>
+    <div class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#reviews">用户评价</a>
+      <a href="#download">下载</a>
+      <a href="#" class="download-btn">立即下载</a>
+    </div>
+  </nav>
+
+  <!-- 英雄区 -->
+  <section class="hero" id="home">
+    <div class="hero-text">
+      <h1>美味外卖，<br>一键直达，极速送达</h1>
+      <p>Foodiez 汇聚全城优质美食，30分钟闪电配送，足不出户尽享人间美味，让每一餐都充满惊喜。</p>
+      <div class="app-buttons">
+        <a href="#" class="app-btn">
+          <span>📱 App Store</span>
+        </a>
+        <a href="#" class="app-btn">
+          <span>🤖 Google Play</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <!-- 替换为你的APP截图 -->
+      <img src="https://picsum.photos/id/292/320/650" alt="Foodiez 应用界面">
+    </div>
+  </section>
+
+  <!-- 功能区 -->
+  <section class="features" id="features">
+    <h2 class="section-title">为什么选择 Foodiez</h2>
+    <p class="section-desc">我们致力于为你提供最便捷、最快速、最丰富的外卖点餐体验</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>海量餐厅</h3>
+        <p>覆盖中餐、西餐、快餐、甜品、生鲜等全品类美食，满足所有口味需求。</p>
+      </div>
+      <div class="feature-card">
+        <h3>极速配送</h3>
+        <p>专业骑手团队，平均30分钟送达，高温天气也能吃到热乎美食。</p>
+      </div>
+      <div class="feature-card">
+        <h3>实时追踪</h3>
+        <p>实时查看骑手位置，订单进度一目了然，无需焦急等待。</p>
+      </div>
+      <div class="feature-card">
+        <h3>优惠不断</h3>
+        <p>每日优惠券、满减活动、会员专属折扣，吃得美味更省钱。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下载引导 -->
+  <section class="cta" id="download">
+    <h2>立即下载 Foodiez，开启美食之旅</h2>
+    <p>iOS / Android 双平台支持，免费下载，新用户专享首单立减20元</p>
+    <div class="app-buttons" style="justify-content: center;">
+      <a href="#" class="app-btn">App Store 下载</a>
+      <a href="#" class="app-btn">Google Play 下载</a>
+    </div>
+  </section>
+
+  <!-- 用户评价 -->
+  <section class="reviews" id="reviews">
+    <h2 class="section-title" style="text-align: center;">用户真实评价</h2>
+    <p class="section-desc" style="text-align: center;">来自数十万用户的真实使用反馈</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>配送速度超级快，菜品新鲜好吃，界面简洁易用，已经推荐给朋友！</p>
+        <div class="user">
+          <img src="https://picsum.photos/id/64/50/50" alt="用户">
+          <div>
+            <h4>李先生</h4>
+            <small>忠实用户</small>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>优惠活动非常多，每天都能省不少钱，外卖软件我只用地 Foodiez！</p>
+        <div class="user">
+          <img src="https://picsum.photos/id/65/50/50" alt="用户">
+          <div>
+            <h4>王女士</h4>
+            <small>会员用户</small>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>实时追踪功能太赞了，再也不用猜外卖到哪了，体验满分。</p>
+        <div class="user">
+          <img src="https://picsum.photos/id/91/50/50" alt="用户">
+          <div>
+            <h4>张先生</h4>
+            <small>上班族</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>Foodiez</h4>
+        <p>让美食更快，让生活更轻松</p>
+      </div>
+      <div class="footer-col">
+        <h4>关于我们</h4>
+        <a href="#">公司介绍</a>
+        <a href="#">联系我们</a>
+        <a href="#">加入我们</a>
+      </div>
+      <div class="footer-col">
+        <h4>帮助中心</h4>
+        <a href="#">订单问题</a>
+        <a href="#">配送说明</a>
+        <a href="#">退款政策</a>
+      </div>
+      <div class="footer-col">
+        <h4>商家服务</h4>
+        <a href="#">入驻申请</a>
+        <a href="#">商家后台</a>
+        <a href="#">运营支持</a>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2025 Foodiez 外卖平台. 保留所有权利.
+    </div>
+  </footer>
+
+  <script>
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

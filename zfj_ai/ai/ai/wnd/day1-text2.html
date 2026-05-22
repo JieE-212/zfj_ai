@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>节日风生日贺卡生成器 | 专属祝福</title>
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fff3e8 0%, #ffe6ee 50%, #ffdce8 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .main-wrap {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .input-panel {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(255, 150, 180, 0.12);
+      padding: 35px 30px;
+      animation: leftFade 1s ease;
+    }
+
+    @keyframes leftFade {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .panel-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .panel-header h2 {
+      color: #ff6b8b;
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .panel-header p {
+      color: #999;
+      font-size: 15px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group label {
+      display: block;
+      color: #444;
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .input-group input {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid #ffd2dc;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      outline: none;
+      background: #fff9fb;
+    }
+
+    .input-group input:focus {
+      border-color: #ff6b8b;
+      box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.15);
+      background: #fff;
+    }
+
+    .generate-btn {
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(90deg, #ff6b8b, #ff8da1);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+    }
+
+    .generate-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(255, 107, 139, 0.25);
+    }
+
+    .card-preview {
+      position: relative;
+      background: #fffafc;
+      border-radius: 24px;
+      box-shadow: 0 12px 40px rgba(255, 120, 150, 0.18);
+      padding: 50px 40px;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      animation: rightFade 1s ease;
+      border: 8px solid #fff;
+      overflow: hidden;
+    }
+
+    @keyframes rightFade {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .card-preview::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, #ff6b8b, #ffd166, #ff6b8b);
+    }
+
+    .card-title {
+      font-size: 34px;
+      color: #ff5a7c;
+      font-weight: bold;
+      margin-bottom: 25px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 8px rgba(255, 90, 124, 0.15);
+    }
+
+    .card-icon {
+      font-size: 70px;
+      color: #ffb347;
+      margin: 15px 0;
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    .empty-tip {
+      color: #bbb;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .wish-content {
+      display: none;
+    }
+
+    .wish-content.show {
+      display: block;
+      animation: textFade 0.8s ease;
+    }
+
+    @keyframes textFade {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .wish-text {
+      font-size: 18px;
+      color: #553344;
+      line-height: 2;
+      margin: 20px 0;
+      padding: 0 20px;
+    }
+
+    .copy-btn {
+      margin-top: 20px;
+      padding: 10px 28px;
+      background: #ff6b8b;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    .copy-btn:hover {
+      background: #ff5a7c;
+      box-shadow: 0 4px 12px rgba(255, 90, 124, 0.2);
+    }
+
+    @media (max-width: 900px) {
+      .main-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .card-preview {
+        min-height: 400px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-wrap">
+    <div class="input-panel">
+      <div class="panel-header">
+        <h2>🎂 生日贺卡生成器</h2>
+        <p>输入信息，定制专属祝福</p>
+      </div>
+      <div class="input-group">
+        <label for="name">👤 对方姓名</label>
+        <input type="text" id="name" placeholder="请输入TA的名字">
+      </div>
+      <div class="input-group">
+        <label for="age">🎈 今年年龄</label>
+        <input type="number" id="age" placeholder="请输入TA的年龄" min="1">
+      </div>
+      <div class="input-group">
+        <label for="hobby">✨ 兴趣爱好</label>
+        <input type="text" id="hobby" placeholder="例如：追剧、打球、画画、旅行、撸猫">
+      </div>
+      <button class="generate-btn" onclick="generateWish()">一键生成专属祝福</button>
+    </div>
+    <div class="card-preview">
+      <h1 class="card-title">生日快乐</h1>
+      <i class="fas fa-birthday-cake card-icon"></i>
+      <div class="empty-tip" id="emptyTip">
+        输入信息<br />即可生成专属生日祝福
+      </div>
+      <div class="wish-content" id="wishContent">
+        <p class="wish-text" id="wishText"></p>
+        <button class="copy-btn" onclick="copyText()">复制贺卡文案</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const wishTemplates = [
+      "祝{name} {age}岁生日快乐！岁岁年年，烟火漫漫，愿你在新的一岁，坚守热爱{hobby}，揽尽温柔与浪漫，平安喜乐，万事顺遂！",
+      "生辰喜乐！恭喜{name}解锁{age}岁崭新人生篇章✨ 愿你依旧热爱{hobby}，不负时光、不负欢喜，岁岁无忧，日日晴朗！",
+      "叮！专属{name}的{age}岁生日限定美好已送达🎂 保持对{hobby}的赤诚热爱，新岁繁花相伴，好运常驻，岁岁皆欢愉！",
+      "岁岁生辰，年年胜意！祝{name} {age}岁生日快乐！以{hobby}为甜，以岁月为暖，往后余生，平安顺遂，喜乐无忧！",
+      "热烈庆贺{name}迈入{age}岁！愿你怀揣热爱{hobby}，奔赴每一场山海，新的一岁，眼里有光、心中有爱，事事皆如愿！",
+      "生日快乐呀{name}🎈 {age}岁的美好刚刚启程！继续奔赴热爱{hobby}，拥抱温柔岁月，年年岁岁，福气满满、快乐多多！"
+    ];
+    function generateWish() {
+      const name = document.getElementById('name').value.trim();
+      const age = document.getElementById('age').value;
+      const hobby = document.getElementById('hobby').value.trim();
+      if (!name || !age || !hobby) {
+        alert('请完整填写姓名、年龄、爱好哦！');
+        return;
+      }
+      const randomIndex = Math.floor(Math.random() * wishTemplates.length);
+      let wish = wishTemplates[randomIndex]
+        .replace(/{name}/g, name)
+        .replace(/{age}/g, age)
+        .replace(/{hobby}/g, hobby);
+      const emptyTip = document.getElementById('emptyTip');
+      const wishContent = document.getElementById('wishContent');
+      const wishText = document.getElementById('wishText');
+      emptyTip.style.display = 'none';
+      wishText.innerText = wish;
+      wishContent.classList.add('show');
+    }
+    function copyText() {
+      const text = document.getElementById('wishText').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('贺卡文案复制成功！🥳');
+      }).catch(() => {
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        alert('贺卡文案复制成功！🥳');
+      });
+    }
+  </script>
+</body>
+
+</html>

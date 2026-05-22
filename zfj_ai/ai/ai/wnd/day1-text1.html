@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>趣味生日贺卡生成器</title>
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(120deg, #ffeef8, #f0f8ff, #fff0f5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 550px;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 8px 30px rgba(255, 105, 180, 0.15);
+      padding: 40px 30px;
+      animation: cardFade 1s ease;
+    }
+
+    @keyframes cardFade {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .header h1 {
+      color: #ff5288;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #888;
+      font-size: 16px;
+    }
+
+    .input-group {
+      margin-bottom: 22px;
+    }
+
+    .input-group label {
+      display: block;
+      color: #333;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .input-group input {
+      width: 100%;
+      height: 50px;
+      padding: 0 18px;
+      border: 1px solid #ffd6e4;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .input-group input:focus {
+      border-color: #ff5288;
+      box-shadow: 0 0 0 3px rgba(255, 82, 136, 0.15);
+    }
+
+    .generate-btn {
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(90deg, #ff5288, #ff7eb3);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .generate-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 18px rgba(255, 82, 136, 0.3);
+    }
+
+    .result-box {
+      margin-top: 30px;
+      padding: 25px;
+      background: #fff5f9;
+      border-radius: 16px;
+      border-left: 5px solid #ff5288;
+      display: none;
+    }
+
+    .result-box.show {
+      display: block;
+      animation: resultFade 0.6s ease;
+    }
+
+    @keyframes resultFade {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .result-title {
+      font-size: 18px;
+      color: #ff5288;
+      font-weight: bold;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .result-text {
+      color: #444;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .copy-btn {
+      margin-top: 15px;
+      padding: 8px 20px;
+      background: #ff5288;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .copy-btn:hover {
+      background: #e04070;
+    }
+
+    .tips {
+      margin-top: 20px;
+      text-align: center;
+      color: #aaa;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-birthday-cake"></i> 生日贺卡生成器</h1>
+      <p>输入信息，一键生成专属趣味生日祝福</p>
+    </div>
+    <div class="input-group">
+      <label for="name">👤 对方姓名</label>
+      <input type="text" id="name" placeholder="请输入TA的名字">
+    </div>
+    <div class="input-group">
+      <label for="age">🎂 今年年龄</label>
+      <input type="number" id="age" placeholder="请输入TA的年龄" min="1">
+    </div>
+    <div class="input-group">
+      <label for="hobby">✨ 兴趣爱好</label>
+      <input type="text" id="hobby" placeholder="例如：追剧、打球、画画、旅行、撸猫">
+    </div>
+    <button class="generate-btn" onclick="generateWish()">一键生成专属祝福</button>
+    <div class="result-box" id="resultBox">
+      <div class="result-title"><i class="fas fa-gift"></i> 专属生日祝福</div>
+      <p class="result-text" id="wishText"></p>
+      <button class="copy-btn" onclick="copyText()">复制祝福文案</button>
+    </div>
+    <div class="tips">
+      可无限生成，每次都是不一样的趣味文案
+    </div>
+  </div>
+  <script>
+    const wishTemplates = [
+      "祝{name} {age}岁生日快乐！新的一岁，继续热爱{hobby}，快乐翻倍、烦恼清零，岁岁无忧，永远鲜活可爱！",
+      "叮！{name} {age}岁生日限定快乐已送达✨ 愿你深耕热爱{hobby}，日子温柔闪光，年年岁岁，平安喜乐，自在欢喜！",
+      "生日快乐呀{name}！恭喜解锁{age}岁全新版本！继续坚持自己喜欢的{hobby}，暴富暴美、万事顺意，好运全年在线！",
+      "热烈庆祝{name} 成功升级{age}岁！愿热爱{hobby}的你，永远被温柔以待，岁岁年年，烟火向星辰，所愿皆成真！",
+      "Hey {name}！{age}岁生日快乐🎈 保持对{hobby}的热爱，保持热烈与真诚，新的一岁，无忧无虑，一路繁花相伴！",
+      "祝超可爱的{name} {age}岁生辰快乐！以{hobby}为乐，以温柔为生，新岁不负时光，不负热爱，万事皆可期！"
+    ];
+    function generateWish() {
+      const name = document.getElementById('name').value.trim();
+      const age = document.getElementById('age').value;
+      const hobby = document.getElementById('hobby').value.trim();
+      if (!name || !age || !hobby) {
+        alert('请完整填写姓名、年龄、爱好哦！');
+        return;
+      }
+      const randomIndex = Math.floor(Math.random() * wishTemplates.length);
+      let wish = wishTemplates[randomIndex]
+        .replace(/{name}/g, name)
+        .replace(/{age}/g, age)
+        .replace(/{hobby}/g, hobby);
+      const resultBox = document.getElementById('resultBox');
+      const wishText = document.getElementById('wishText');
+      wishText.innerText = wish;
+      resultBox.classList.add('show');
+    }
+    function copyText() {
+      const text = document.getElementById('wishText').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('祝福文案复制成功！快去发送吧🥳');
+      }).catch(() => {
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        alert('祝福文案复制成功！快去发送吧🥳');
+      });
+    }
+  </script>
+</body>
+
+</html>
