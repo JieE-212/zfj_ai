@@ -39,3 +39,12 @@
 - git commit -m 'wrote a readme file'
     存储到了.git 仓库中，有了第一个快照
     2 insertions 新增内容有2行
+- git 配置
+    git config --global user.name ""
+    git config --global user.email ""
+    gitee 证件
+
+## repo 仓库
+    - remote origin 远程源
+    - git push origin master/main
+
