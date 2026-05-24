@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "曹智刚",
+      "hometown": "南昌"
+    },
+    {
+      "id": "2",
+      "name": "廖昊",
+      "hometown": "赣州"
+    },
+    {
+      "id": "3",
+      "name": "黄月美",
+      "hometown": "赣州"
+    },
+    {
+      "id": "7jJkFHMsk7Y",
+      "name": "江祖豪",
+      "hometown": "九江"
+    },
+    {
+      "name": "赵杰",
+      "hometown": "吉安县",
+      "id": "X53KzNzoJHE"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
