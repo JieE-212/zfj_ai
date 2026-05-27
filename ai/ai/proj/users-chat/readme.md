@@ -69,6 +69,31 @@ node包管理器
     - 有利于搜索引擎优化 SEO 爬虫看的
       百度/google 爬虫 爬取网页 分析DOM结构
 - DOM 模型
+    Document Object Model 文档对象模型
+    - Document
+    html document 文本
+    text/plain
+    html 标签 a img h1 http 传输的超文本传输协议一种文本格式
+    text/html 
+    <!DOCTYPE html>
+    ! html5 版本的标记
+- DOM树 
+    html 是根节点
+      body 可视区的开始节点
+        header
+        .container
+          nav
+          main
+          nav
+        footer
+- Object Model? 
+    html 通过浏览器（html parser c++）的树状结构，在内存中建立了全局的Document对象
+    通过Document 对象可以 操作html ，动态改变页面
+    DOM 编程
+    document.querySelector 树的查找
+    id 很快 唯一 索引
+    .table 次之
+    标签 最慢
 
 - 内容
     行内
