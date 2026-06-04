@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5f3ff"/>
+      <stop offset="100%" style="stop-color:#ede7f6"/>
+    </linearGradient>
+    <linearGradient id="goodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#07c160"/>
+      <stop offset="100%" style="stop-color:#06ad56"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#00000010"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="460" fill="url(#bgGrad)" rx="12"/>
+
+  <text x="400" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a1a">🤖 AI 时代：好 Prompt = 好代码</text>
+
+  <!-- Bad Prompt -->
+  <rect x="25" y="65" width="355" height="155" rx="10" fill="#fff" filter="url(#shadow)"/>
+  <rect x="25" y="65" width="355" height="42" rx="10" fill="#ff6b6b"/>
+  <rect x="25" y="97" width="355" height="10" fill="#ff6b6b"/>
+  <text x="202" y="92" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">❌ 模糊的 Prompt</text>
+
+  <text x="52" y="132" font-size="13" fill="#666">"帮我写个页面"</text>
+  <text x="52" y="155" font-size="13" fill="#666">"加个按钮"</text>
+
+  <line x1="45" y1="172" x2="360" y2="172" stroke="#e0e0e0" stroke-width="1"/>
+
+  <text x="52" y="195" font-size="13" font-weight="600" fill="#ff6b6b">结果：</text>
+  <text x="52" y="215" font-size="12" fill="#888">• 使用 div 堆砌，无语义化</text>
+  <text x="52" y="233" font-size="12" fill="#888">• class 命名随意，不可维护</text>
+
+  <!-- Arrow -->
+  <text x="395" y="145" text-anchor="middle" font-size="28" fill="#7c4dff">→</text>
+
+  <!-- Good Prompt -->
+  <rect x="420" y="65" width="355" height="155" rx="10" fill="#fff" filter="url(#shadow)"/>
+  <rect x="420" y="65" width="355" height="42" rx="10" fill="url(#goodGrad)"/>
+  <rect x="420" y="97" width="355" height="10" fill="url(#goodGrad)"/>
+  <text x="597" y="92" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">✅ 精准的 Prompt</text>
+
+  <text x="447" y="132" font-size="13" fill="#07c160">"使用 HTML5 语义化标签</text>
+  <text x="447" y="155" font-size="13" fill="#07c160"> 遵循 BEM 命名规范</text>
+  <text x="447" y="178" font-size="13" fill="#07c160"> 进行 CSS Reset（不用 * 通配符）"</text>
+
+  <line x1="440" y1="195" x2="755" y2="195" stroke="#e0e0e0" stroke-width="1"/>
+
+  <text x="447" y="218" font-size="13" font-weight="600" fill="#07c160">结果：</text>
+  <text x="447" y="238" font-size="12" fill="#555">• 结构清晰，语义化标签</text>
+  <text x="447" y="256" font-size="12" fill="#555">• BEM 命名，可读可维护</text>
+
+  <!-- Bottom: Prompt Engineering Principle -->
+  <rect x="25" y="245" width="750" height="195" rx="10" fill="#fff" filter="url(#shadow)"/>
+
+  <text x="400" y="275" text-anchor="middle" font-size="16" font-weight="700" fill="#7c4dff">💡 AI Prompt 工程三要素</text>
+
+  <!-- Three pillars -->
+  <rect x="45" y="295" width="220" height="70" rx="8" fill="#f5f3ff" stroke="#7c4dff" stroke-width="1"/>
+  <text x="155" y="320" text-anchor="middle" font-size="14" font-weight="600" fill="#7c4dff">📋 明确规范</text>
+  <text x="155" y="342" text-anchor="middle" font-size="12" fill="#555">把技术规范写进 Prompt</text>
+  <text x="155" y="358" text-anchor="middle" font-size="12" fill="#888">BEM · 语义化 · Reset</text>
+
+  <rect x="290" y="295" width="220" height="70" rx="8" fill="#f5f3ff" stroke="#7c4dff" stroke-width="1"/>
+  <text x="400" y="320" text-anchor="middle" font-size="14" font-weight="600" fill="#7c4dff">🎯 具体约束</text>
+  <text x="400" y="342" text-anchor="middle" font-size="12" fill="#555">不用泛泛的要求</text>
+  <text x="400" y="358" text-anchor="middle" font-size="12" fill="#888">"不用 * 通配符" 而非 "要性能好"</text>
+
+  <rect x="535" y="295" width="220" height="70" rx="8" fill="#f5f3ff" stroke="#7c4dff" stroke-width="1"/>
+  <text x="645" y="320" text-anchor="middle" font-size="14" font-weight="600" fill="#7c4dff">🧠 审美判断</text>
+  <text x="645" y="342" text-anchor="middle" font-size="12" fill="#555">你决定什么是好代码</text>
+  <text x="645" y="358" text-anchor="middle" font-size="12" fill="#888">AI 只是执行工具</text>
+
+  <!-- Golden sentence -->
+  <rect x="45" y="380" width="710" height="45" rx="8" fill="#ede7f6"/>
+  <text x="400" y="408" text-anchor="middle" font-size="14" font-weight="600" fill="#7c4dff">💎 "规范和审美，才是你在 AI 时代不可替代的核心竞争力"</text>
+</svg>

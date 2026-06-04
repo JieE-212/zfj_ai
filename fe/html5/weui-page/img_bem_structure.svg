@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5f7fa"/>
+      <stop offset="100%" style="stop-color:#e4e8ed"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#00000010"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="520" fill="url(#bgGrad)" rx="12"/>
+
+  <text x="400" y="42" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a1a">BEM 命名规范三要素：Block · Element · Modifier</text>
+
+  <!-- Three columns -->
+  <!-- Column 1: Block -->
+  <rect x="25" y="70" width="240" height="430" rx="12" fill="#fff" filter="url(#shadow)"/>
+  <rect x="25" y="70" width="240" height="50" rx="12" fill="#07c160"/>
+  <rect x="25" y="108" width="240" height="12" fill="#07c160"/>
+  <text x="145" y="102" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">🧱 Block（块）</text>
+
+  <text x="145" y="148" text-anchor="middle" font-size="13" fill="#555">独立的、有意义的组件</text>
+  <text x="145" y="170" text-anchor="middle" font-size="12" fill="#999">命名：单个英文单词</text>
+
+  <line x1="50" y1="185" x2="240" y2="185" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Examples -->
+  <rect x="40" y="200" width="210" height="36" rx="6" fill="#f0faf4" stroke="#07c160" stroke-width="1"/>
+  <text x="145" y="223" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#07c160" font-weight="600">.page</text>
+
+  <rect x="40" y="248" width="210" height="36" rx="6" fill="#f0faf4" stroke="#07c160" stroke-width="1"/>
+  <text x="145" y="271" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#07c160" font-weight="600">.weui-btn</text>
+
+  <rect x="40" y="296" width="210" height="36" rx="6" fill="#f0faf4" stroke="#07c160" stroke-width="1"/>
+  <text x="145" y="319" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#07c160" font-weight="600">.header</text>
+
+  <text x="145" y="370" text-anchor="middle" font-size="13" fill="#555">📦 特点</text>
+  <text x="145" y="395" text-anchor="middle" font-size="12" fill="#777">• 可独立存在</text>
+  <text x="145" y="418" text-anchor="middle" font-size="12" fill="#777">• 不依赖其他组件</text>
+  <text x="145" y="441" text-anchor="middle" font-size="12" fill="#777">• 一个页面可有多个Block</text>
+
+  <!-- Column 2: Element -->
+  <rect x="280" y="70" width="240" height="430" rx="12" fill="#fff" filter="url(#shadow)"/>
+  <rect x="280" y="70" width="240" height="50" rx="12" fill="#1989fa"/>
+  <rect x="280" y="108" width="240" height="12" fill="#1989fa"/>
+  <text x="400" y="102" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">📎 Element（元素）</text>
+
+  <text x="400" y="148" text-anchor="middle" font-size="13" fill="#555">Block 下的子元素</text>
+  <text x="400" y="170" text-anchor="middle" font-size="12" fill="#999">命名：Block<b>__</b>element</text>
+  <text x="400" y="188" text-anchor="middle" font-size="12" fill="#999">双下划线连接</text>
+
+  <line x1="305" y1="200" x2="495" y2="200" stroke="#e0e0e0" stroke-width="1"/>
+
+  <rect x="295" y="215" width="210" height="36" rx="6" fill="#edf4ff" stroke="#1989fa" stroke-width="1"/>
+  <text x="400" y="229" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#1989fa" font-weight="600">.page<b>__</b>hd</text>
+
+  <rect x="295" y="263" width="210" height="36" rx="6" fill="#edf4ff" stroke="#1989fa" stroke-width="1"/>
+  <text x="400" y="277" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#1989fa" font-weight="600">.page<b>__</b>bd</text>
+
+  <rect x="295" y="311" width="210" height="36" rx="6" fill="#edf4ff" stroke="#1989fa" stroke-width="1"/>
+  <text x="400" y="325" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#1989fa" font-weight="600">.page<b>__</b>title</text>
+
+  <rect x="295" y="359" width="210" height="36" rx="6" fill="#edf4ff" stroke="#1989fa" stroke-width="1"/>
+  <text x="400" y="373" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#1989fa" font-weight="600">.page<b>__</b>desc</text>
+
+  <text x="400" y="420" text-anchor="middle" font-size="13" fill="#555">🔗 特点</text>
+  <text x="400" y="445" text-anchor="middle" font-size="12" fill="#777">• 依赖Block存在</text>
+  <text x="400" y="468" text-anchor="middle" font-size="12" fill="#777">• 不能独立使用</text>
+
+  <!-- Column 3: Modifier -->
+  <rect x="535" y="70" width="240" height="430" rx="12" fill="#fff" filter="url(#shadow)"/>
+  <rect x="535" y="70" width="240" height="50" rx="12" fill="#ff9800"/>
+  <rect x="535" y="108" width="240" height="12" fill="#ff9800"/>
+  <text x="655" y="102" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">🎨 Modifier（修饰符）</text>
+
+  <text x="655" y="148" text-anchor="middle" font-size="13" fill="#555">不同的状态或变体</text>
+  <text x="655" y="170" text-anchor="middle" font-size="12" fill="#999">命名：Block<b>_</b>modifier</text>
+  <text x="655" y="188" text-anchor="middle" font-size="12" fill="#999">单下划线连接</text>
+
+  <line x1="560" y1="200" x2="750" y2="200" stroke="#e0e0e0" stroke-width="1"/>
+
+  <rect x="550" y="215" width="210" height="36" rx="6" fill="#fff8f0" stroke="#ff9800" stroke-width="1"/>
+  <text x="655" y="229" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#e67e00" font-weight="600">.weui-btn<b>_</b>primary</text>
+
+  <rect x="550" y="263" width="210" height="36" rx="6" fill="#fff8f0" stroke="#ff9800" stroke-width="1"/>
+  <text x="655" y="277" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#e67e00" font-weight="600">.weui-btn<b>_</b>default</text>
+
+  <rect x="550" y="311" width="210" height="36" rx="6" fill="#fff8f0" stroke="#ff9800" stroke-width="1"/>
+  <text x="655" y="325" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#e67e00" font-weight="600">.weui-btn<b>_</b>disabled</text>
+
+  <rect x="550" y="359" width="210" height="36" rx="6" fill="#fff8f0" stroke="#ff9800" stroke-width="1"/>
+  <text x="655" y="373" text-anchor="middle" font-size="14" font-family="'Fira Code',monospace" fill="#e67e00" font-weight="600">.weui-btn<b>_</b>loading</text>
+
+  <text x="655" y="420" text-anchor="middle" font-size="13" fill="#555">🔄 特点</text>
+  <text x="655" y="445" text-anchor="middle" font-size="12" fill="#777">• 表示状态变化</text>
+  <text x="655" y="468" text-anchor="middle" font-size="12" fill="#777">• 叠加在Block上</text>
+
+</svg>

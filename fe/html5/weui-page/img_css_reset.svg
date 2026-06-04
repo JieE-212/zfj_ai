@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fafafa"/>
+      <stop offset="100%" style="stop-color:#f0f0f0"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#00000010"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#bgGrad)" rx="12"/>
+
+  <text x="400" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a1a">CSS Reset：把浏览器画布变成一张"白纸"</text>
+
+  <!-- Left: BEFORE Reset -->
+  <rect x="25" y="65" width="365" height="415" rx="12" fill="#fff" filter="url(#shadow)"/>
+  <rect x="25" y="65" width="365" height="48" rx="12" fill="#ff6b6b"/>
+  <rect x="25" y="101" width="365" height="12" fill="#ff6b6b"/>
+  <text x="207" y="96" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">❌ Before：各浏览器默认样式不一致</text>
+
+  <!-- Browser boxes -->
+  <rect x="45" y="130" width="150" height="80" rx="8" fill="#fff0f0" stroke="#ff6b6b" stroke-width="1.5"/>
+  <text x="120" y="155" text-anchor="middle" font-size="13" font-weight="600" fill="#ff6b6b">Chrome</text>
+  <text x="120" y="178" text-anchor="middle" font-size="11" fill="#666">body margin: 8px</text>
+  <text x="120" y="196" text-anchor="middle" font-size="11" fill="#666">默认字体: 16px</text>
+
+  <rect x="210" y="130" width="150" height="80" rx="8" fill="#fff0f0" stroke="#ff6b6b" stroke-width="1.5"/>
+  <text x="285" y="155" text-anchor="middle" font-size="13" font-weight="600" fill="#ff6b6b">Firefox</text>
+  <text x="285" y="178" text-anchor="middle" font-size="11" fill="#666">body margin: 8px</text>
+  <text x="285" y="196" text-anchor="middle" font-size="11" fill="#666">button 有内边距</text>
+
+  <rect x="45" y="225" width="315" height="80" rx="8" fill="#fff5f5" stroke="#ff6b6b" stroke-width="1.5"/>
+  <text x="207" y="250" text-anchor="middle" font-size="13" font-weight="600" fill="#ff6b6b">⚠️ 问题</text>
+  <text x="207" y="272" text-anchor="middle" font-size="12" fill="#666">同一份CSS，Chrome和Firefox效果不同</text>
+  <text x="207" y="296" text-anchor="middle" font-size="12" fill="#666">页面在不同浏览器上"货不对板"</text>
+
+  <!-- Wrong approach -->
+  <rect x="45" y="320" width="315" height="55" rx="8" fill="#ffeeee" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="207" y="342" text-anchor="middle" font-size="12" font-weight="600" fill="#ff6b6b">❌ 错误做法：使用通配符 *</text>
+  <text x="207" y="362" text-anchor="middle" font-size="11" font-family="'Fira Code',monospace" fill="#cc4444">* { margin: 0; padding: 0; }</text>
+
+  <!-- Right: AFTER Reset -->
+  <rect x="410" y="65" width="365" height="415" rx="12" fill="#fff" filter="url(#shadow)"/>
+  <rect x="410" y="65" width="365" height="48" rx="12" fill="#07c160"/>
+  <rect x="410" y="101" width="365" height="12" fill="#07c160"/>
+  <text x="592" y="96" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">✅ After：所有浏览器统一归零</text>
+
+  <!-- Correct approach -->
+  <rect x="430" y="130" width="325" height="95" rx="8" fill="#f0faf4" stroke="#07c160" stroke-width="1.5"/>
+  <text x="592" y="155" text-anchor="middle" font-size="13" font-weight="600" fill="#07c160">✅ 正确做法：显式列出元素标签</text>
+  <text x="592" y="178" text-anchor="middle" font-size="11" font-family="'Fira Code',monospace" fill="#333">html, body, div, span, h1~h6,</text>
+  <text x="592" y="195" text-anchor="middle" font-size="11" font-family="'Fira Code',monospace" fill="#333">p, a, ul, li, article, header...</text>
+  <text x="592" y="215" text-anchor="middle" font-size="11" font-family="'Fira Code',monospace" fill="#07c160">{ margin:0; padding:0; }</text>
+
+  <rect x="430" y="238" width="325" height="60" rx="8" fill="#f0faf4" stroke="#07c160" stroke-width="1"/>
+  <text x="592" y="262" text-anchor="middle" font-size="13" font-weight="600" fill="#07c160">📋 优势</text>
+  <text x="592" y="283" text-anchor="middle" font-size="12" fill="#444">性能更好 · 语义明确 · 兼容性强</text>
+
+  <!-- normalize.css recommendation -->
+  <rect x="430" y="312" width="325" height="55" rx="8" fill="#e8f5e9" stroke="#07c160" stroke-width="1"/>
+  <text x="592" y="336" text-anchor="middle" font-size="13" font-weight="600" fill="#07c160">💡 推荐：使用 normalize.css</text>
+  <text x="592" y="356" text-anchor="middle" font-size="12" fill="#555">社区验证的标准化方案，保留有意义默认样式</text>
+
+  <!-- Arrow -->
+  <text x="400" y="275" text-anchor="middle" font-size="32" fill="#07c160">→</text>
+
+  <!-- Bottom summary -->
+  <rect x="25" y="425" width="365" height="55" rx="8" fill="#f5f5f5"/>
+  <text x="207" y="448" text-anchor="middle" font-size="12" fill="#666">"一张有污渍的画布，画不出干净的作品"</text>
+  <text x="207" y="468" text-anchor="middle" font-size="12" fill="#666">—— 先把页面重置为干净的白纸</text>
+
+  <rect x="410" y="425" width="365" height="55" rx="8" fill="#f5f5f5"/>
+  <text x="592" y="448" text-anchor="middle" font-size="12" fill="#666">"规范化不是限制创造力，</text>
+  <text x="592" y="468" text-anchor="middle" font-size="12" fill="#666">而是让你的创造力在任何浏览器都能完美呈现"</text>
+</svg>
