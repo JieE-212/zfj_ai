@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 550" width="800" height="550">
+  <defs>
+    <linearGradient id="repBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="matchGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#64748b"/>
+      <stop offset="100%" style="stop-color:#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="captureGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#fb923c"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="550" fill="url(#repBg)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#e2e8f0">分组替换 · () 的捕获艺术</text>
+
+  <!-- ====== 1. Source string ====== -->
+  <text x="50" y="72" font-family="sans-serif" font-size="13" fill="#94a3b8">① 原始字符串</text>
+  <rect x="50" y="82" width="700" height="44" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <text x="400" y="109" text-anchor="middle" font-family="monospace" font-size="20" letter-spacing="2" fill="#e2e8f0">hello<tspan fill="#f87171">-</tspan><tspan fill="#fb923c" font-weight="bold">w</tspan>orld</text>
+
+  <!-- ====== 2. Regex breakdown ====== -->
+  <text x="50" y="155" font-family="sans-serif" font-size="13" fill="#94a3b8">② 正则表达式拆解</text>
+  <rect x="50" y="165" width="700" height="70" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+
+  <!-- Regex: /-(\w)/ -->
+  <text x="80" y="195" font-family="monospace" font-size="20" fill="#94a3b8">/</text>
+  <text x="98" y="195" font-family="monospace" font-size="20" fill="#f87171">-</text>
+  <text x="110" y="195" font-family="monospace" font-size="20" fill="#94a3b8">(</text>
+  <text x="122" y="195" font-family="monospace" font-size="20" fill="#fb923c" font-weight="bold">\w</text>
+  <text x="142" y="195" font-family="monospace" font-size="20" fill="#94a3b8">)/</text>
+
+  <!-- Annotations -->
+  <line x1="106" y1="212" x2="106" y2="225" stroke="#f87171" stroke-width="1"/>
+  <text x="106" y="232" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#f87171">匹配 '-'</text>
+
+  <line x1="132" y1="212" x2="250" y2="220" stroke="#fb923c" stroke-width="1"/>
+  <text x="250" y="232" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fb923c">(\w) 分组捕获一个单词字符</text>
+
+  <!-- ====== 3. Match result ====== -->
+  <text x="50" y="270" font-family="sans-serif" font-size="13" fill="#94a3b8">③ 匹配过程</text>
+  <rect x="50" y="280" width="700" height="85" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+
+  <!-- Match visualization -->
+  <rect x="80" y="295" width="160" height="55" rx="6" fill="#334155" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="160" y="318" text-anchor="middle" font-family="monospace" font-size="14" fill="#94a3b8">完整匹配</text>
+  <text x="160" y="340" text-anchor="middle" font-family="monospace" font-size="18" font-weight="bold" fill="#cbd5e1">-w</text>
+
+  <!-- Arrow -->
+  <text x="255" y="332" font-family="monospace" font-size="22" fill="#6366f1">→</text>
+
+  <!-- Group 1 capture -->
+  <rect x="290" y="295" width="160" height="55" rx="6" fill="#9a3412" opacity="0.4" stroke="#f97316" stroke-width="2"/>
+  <text x="370" y="318" text-anchor="middle" font-family="monospace" font-size="14" fill="#fb923c">分组1 捕获</text>
+  <text x="370" y="340" text-anchor="middle" font-family="monospace" font-size="18" font-weight="bold" fill="#fbbf24">w</text>
+
+  <!-- Explanation -->
+  <text x="490" y="318" font-family="sans-serif" font-size="12" fill="#64748b">match[0] = '-w'  ← 完整匹配</text>
+  <text x="490" y="338" font-family="sans-serif" font-size="12" fill="#64748b">match[1] = 'w'   ← 分组1捕获</text>
+
+  <!-- ====== 4. replace callback ====== -->
+  <text x="50" y="400" font-family="sans-serif" font-size="13" fill="#94a3b8">④ replace 回调函数参数映射</text>
+  <rect x="50" y="410" width="700" height="55" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+
+  <text x="80" y="435" font-family="monospace" font-size="14" fill="#94a3b8">str.replace(reg, (</text>
+
+  <!-- param 1: _ -->
+  <rect x="310" y="418" width="90" height="36" rx="4" fill="#334155"/>
+  <text x="355" y="442" text-anchor="middle" font-family="monospace" font-size="13" fill="#94a3b8">_  完整匹配</text>
+
+  <text x="410" y="442" font-family="monospace" font-size="14" fill="#94a3b8">,</text>
+
+  <!-- param 2: c -->
+  <rect x="425" y="418" width="90" height="36" rx="4" fill="#9a3412" opacity="0.5"/>
+  <text x="470" y="442" text-anchor="middle" font-family="monospace" font-size="13" fill="#fb923c">c  分组捕获</text>
+
+  <text x="525" y="442" font-family="monospace" font-size="14" fill="#94a3b8">) => c.toUpperCase())</text>
+
+  <!-- ====== 5. Result ====== -->
+  <text x="50" y="495" font-family="sans-serif" font-size="13" fill="#94a3b8">⑤ 最终结果</text>
+  <rect x="50" y="505" width="700" height="35" rx="8" fill="#166534" opacity="0.3" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="400" y="528" text-anchor="middle" font-family="monospace" font-size="18" fill="#4ade80">helloWorld ✨</text>
+</svg>
