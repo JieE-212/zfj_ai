@@ -24,3 +24,32 @@ es6 是JavaScript 在2015年发布的新版本，变化比较大，目标是让J
   - import from
   - export default
   - export
+
+## nlp 任务
+- 情感分类  sentiment analysis(classification)
+  正面 | 负面 | 中性
+  电商等行业中非常重要 客户服务、预警、产品质检等
+  后台 
+- 信息提取  information extraction
+- 主题推断  topic detection
+- 文本总结  summarization
+  老板、行政岗、小编 需要对长文本进行总结，提取出信息，减少工作量
+
+仅用几分钟，我们就可以构建多个用于对文本进行**推理**的系统，而以前需要熟练的机器学习人员数天到数周的时间（平等）。
+让我们兴奋， 可以使用Prompt 构建nlp系统
+
+## 学习内容（本周）
+### 前端
+- html 语义化标签，BEM 命名规范
+- es6 array API 正则
+- 你不知道的JavaScript 
+  js执行机制的原型链
+### 后端
+- python  list & dict
+- node  process & esm
+- resful api 设计
+### AI
+- prompt
+- AIGC 接口 
+  ![ChatGPT Prompt Engineering for Developers](https://www.deeplearning.ai/courses/chatgpt-prompt-eng)
+- nlp 任务
