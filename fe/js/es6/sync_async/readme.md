@@ -26,5 +26,18 @@ cpu执行时间 不能霸占，几十毫秒的轮询分配给进程的执行时�
 
 ## 控制执行流程呢？
 A fetch  users api 所有的用户
-B fetch  
-  
+B fetch  每一个用户 
+
+## 理解Promise
+- 实例化Promise 
+- 需要传递一个函数，executor 
+  会立即执行，是耗时性任务的容器
+  同步，里面可以容纳异步任务
+  会得到resolve 和 reject 两个函数能力
+- resolve 表示异步任务成功解决了
+  then 被调用
+- reject 表示异步任务失败了
+  catch 被调用
+- 在executor 里面的异步任务成功解决或异常时，手动调用
+- resolve(result) 传给then 
+- reject(error) 失败的原因传给catch
