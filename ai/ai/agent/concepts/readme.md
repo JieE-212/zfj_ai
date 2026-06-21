@@ -35,5 +35,4 @@ openai 提供了接口 tools
 tool 函数 (llm 理解 需要的参数)
 结果交给llm，再completion 一次
 
-2026.6.18
-2026.6.20
+2026.6.21
