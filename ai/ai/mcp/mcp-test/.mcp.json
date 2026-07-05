@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem"
+      ],
+      "path": "C:\\Users\\ZFJJi\\Desktop\\workspace"
+    }
+  }
+}

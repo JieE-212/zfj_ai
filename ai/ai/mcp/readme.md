@@ -27,3 +27,16 @@ MCP client(Cursor, Trae, Claude Code, Codex)，对接Claude OpenAI 等各大模�
 ## 案例
 - npm i -g @modelcontextprotocol/server-filesystem 
 MCP 官方文件体系统服务端，安装完了，本地server / 远程server  ，用于通过MCP 协议安全读写本地指定目录文件，为AI模型提供合规的本地访问能力。
+
+MCP 不单单只是便利，而是从根本上重构了AI的整个应用架构。真正把AI，从chatbot 推到了Agentic AI （智能体AI）阶段。
+
+## 什么是MCP？
+- 它不是一个工具，也不是一个应用，不是一个api sdk，也不是一个产品，而是一个协议。它的目标是希望任何一个AI 模型，能以统一的方式去访问资源和工具。
+mcp 就是llm 和外部世界的一个通信协议。
+模型需要交互什么呢？ 模型想知道、能用的、能调的内容。（工具和资源）
+
+### 资源
+数据库、API、文件， Sass (飞书、高德地图)
+### Tool
+创建日历、发邮件、执行命令、远程控制。
+这些资源和工具就是让大模型变得真正有用的上下文和能力。
