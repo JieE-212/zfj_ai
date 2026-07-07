@@ -8,6 +8,6 @@ const model = new ChatOpenAI({
     }
 });
 //client.chat.completions.create
-const response = 
+const response =
     await model.invoke('棍王杯台球比赛应该设置什么奖励?');
 console.log(response);

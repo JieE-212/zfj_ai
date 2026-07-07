@@ -13,6 +13,7 @@
     "@langchain/core": "^1.2.1",
     "@langchain/openai": "^1.5.3",
     "dotenv": "^17.4.2",
+    "openai": "^6.45.0",
     "zod": "^4.4.3"
   }
 }
