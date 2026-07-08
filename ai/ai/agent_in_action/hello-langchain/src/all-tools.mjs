@@ -30,7 +30,69 @@ const readFileTool = tool(
 
 // 写文件
 const writeFileTool = tool(
+  // path 模块 专门的路径模块 Agent执行正确服务 
+  // path 路径  /src/all-tool.mjs 路径模块
   async ({ filePath, content }) => {
+    // 1. 确认路径是否存在
+    // 2. 写入文件，utf-8 
+    // 3. 容错处理
+    try {
+      const dir = path.dirname(filePath);
+      console.log(dir, '目录');
+      // 已存在 目录不创建  
+      // 递归创建 /a/b/c/123.js
+      await fs.mkdir(dir, { recursive: true });
 
+      await fs.writeFile(filePath, content, 'utf-8');
+      console.log(`[工具调用] write_file(${filePath}) 成功写入 ${content.length} 字节`)
+      return `成功写入 ${filePath}`
+    } catch (err) {
+      console.log(`[工具调用] write_file(${filePath}) 错误：${err.message}`)
+      return `写入文件失败：${err.message}`;
+    }
+  },
+  {
+    name: 'write_file',
+    description: '向指定路径写入文件内容，自动创建目录',
+    schema: z.object({
+      filePath: z.string().description('文件路径'),
+      content: z.string().describe('要写入的文件内容')
+    })
   }
 )
+
+// 列出目录内容工具
+const listDirectoryTool = tool(
+  async ({ directoryPath }) => {
+    // 后端以稳定为主
+    try {
+      // 列出目录下的所有文件和文件夹
+      const files = await fs.readdir(directoryPath);
+      console.log(`[工具调用] list_directory(${directoryPath}) 成功列出 ${files.length} 个文件和文件夹`)
+      return `目录内容：\n ${files.map(file => file.name).join('\n')}`
+    } catch (err) {
+      console.log(`[工具调用] list_directory(${directoryPath}) 错误：${err.message}`)
+      return `列出目录内容失败：${err.message}`
+    }
+  },
+  {
+    name: 'list_directory',
+    description: '列出指定目录下的所有文件和文件夹',
+    schema: z.object({
+      directoryPath: z.string().describe('目录路径')
+    })
+  }
+)
+
+// 执行命令工具（带实时输出）
+const executeCommandTool = tool(
+  async ({ command, directoryPath }) => { },
+  {
+    name: 'execute_command',
+    description: '执行系统命令，支持指定工作目录，实时显示输出',
+    schema: z.object({
+      command: z.string().describe('要执行的命令'),
+      directoryPath: z.string().describe('工作目录(推荐指定)')
+    })
+  }
+)  
