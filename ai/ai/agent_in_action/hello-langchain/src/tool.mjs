@@ -9,7 +9,7 @@ import {
 } from '@langchain/core/messages';
 import fs from 'node:fs/promises';
 import { z } from 'zod';  // z 提供类型约束
-import { console } from 'node:inspector';
+
 
 const model = new ChatOpenAI({
     modelName: 'deepseek-v4-flash',

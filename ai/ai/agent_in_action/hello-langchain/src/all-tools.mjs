@@ -1,9 +1,9 @@
 import { tool } from '@langchain/core/tools';
 import fs from 'node:fs/promises';
-// 判断路径的合法性 路径的拼接 ...
+// 判断路径的合法性 路径的拼接 ... 
 import path from 'node:path'; // node 内置的 path 模块
-import { spawn } from 'node:child_process';
-import z from 'zod';
+import { spawn } from 'node:child_process'
+import { z } from 'zod';
 
 // I/O 工具
 // 读文件
@@ -33,45 +33,49 @@ const writeFileTool = tool(
   // path 模块 专门的路径模块 Agent执行正确服务 
   // path 路径  /src/all-tool.mjs 路径模块
   async ({ filePath, content }) => {
-    // 1. 确认路径是否存在
-    // 2. 写入文件，utf-8 
+    // 1. 确认路径是否在当前工作目录下
+    // 2. 写入文件， utf-8 
     // 3. 容错处理
     try {
       const dir = path.dirname(filePath);
       console.log(dir, '目录');
-      // 已存在 目录不创建  
+      //  已存在 目录不创建  
       // 递归创建 /a/b/c/123.js
       await fs.mkdir(dir, { recursive: true });
-
+      // 写入文件
       await fs.writeFile(filePath, content, 'utf-8');
-      console.log(`[工具调用] write_file(${filePath}) 成功写入 ${content.length} 字节`)
+      console.log(`[工具调用] write_file(${filePath})
+            成功写入 ${content.length} 字节`)
       return `成功写入 ${filePath}`
     } catch (err) {
-      console.log(`[工具调用] write_file(${filePath}) 错误：${err.message}`)
-      return `写入文件失败：${err.message}`;
+      console.log(`[工具调用] write_file(${filePath})
+            错误： ${err.message}`)
+      return `写入文件失败：${err.message}`
     }
   },
   {
     name: 'write_file',
     description: '向指定路径写入文件内容，自动创建目录',
     schema: z.object({
-      filePath: z.string().description('文件路径'),
+      filePath: z.string().describe('文件路径'),
       content: z.string().describe('要写入的文件内容')
     })
   }
 )
 
-// 列出目录内容工具
+// 列出目录内容工具 
 const listDirectoryTool = tool(
   async ({ directoryPath }) => {
-    // 后端以稳定为主
+    // 后端以稳定为主 
     try {
       // 列出目录下的所有文件和文件夹
       const files = await fs.readdir(directoryPath);
-      console.log(`[工具调用] list_directory(${directoryPath}) 成功列出 ${files.length} 个文件和文件夹`)
-      return `目录内容：\n ${files.map(file => file.name).join('\n')}`
+      console.log(`[工具调用] list_directory(${directoryPath})
+            成功列出 ${files.length} 个文件和文件夹`)
+      return `目录内容：\n ${files.map(file => file).join('\n')}`
     } catch (err) {
-      console.log(`[工具调用] list_directory(${directoryPath}) 错误：${err.message}`)
+      console.log(`[工具调用] list_directory(${directoryPath})
+            错误： ${err.message}`)
       return `列出目录内容失败：${err.message}`
     }
   },
@@ -86,7 +90,38 @@ const listDirectoryTool = tool(
 
 // 执行命令工具（带实时输出）
 const executeCommandTool = tool(
-  async ({ command, directoryPath }) => { },
+  async ({ command, directoryPath }) => {
+    const cwd = directoryPath || process.cwd();
+    console.log(`[工具调用] execute_command(${command})
+        工作目录：${cwd}`);
+    return new Promise((resolve, reject) => {
+      const [cmd, ...args] = command.split(' ');
+      const child = spawn(cmd, args, {
+        cwd,
+        stdio: 'inherit',
+        shell: true,
+      })
+      let errorMsg = '';
+      child.on('error', (err) => {
+        errorMsg = err.message
+      });
+      child.on('close', (code) => {
+        if (code === 0) { // 运行顺利，成功退出
+          console.log(`[工具调用] execute_command(${command})
+                   成功执行`)
+          const cwdInfo = directoryPath ?
+            `\n\n重要提示：命令在目录”${directoryPath}” 执行`
+            : '';
+          resolve(`命令行成功执行 ${command}${cwdInfo}`);
+        } else {
+          console.log(`[工具调用] execute_command(${command})
+                    退出码：${code}`)
+          resolve(`命令执行失败，退出码：${code}\n 错误：${errorMsg}`)
+        }
+      })
+    })
+
+  },
   {
     name: 'execute_command',
     description: '执行系统命令，支持指定工作目录，实时显示输出',
@@ -95,4 +130,11 @@ const executeCommandTool = tool(
       directoryPath: z.string().describe('工作目录(推荐指定)')
     })
   }
-)  
+)
+
+export {
+  readFileTool,
+  writeFileTool,
+  listDirectoryTool,
+  executeCommandTool,
+}
