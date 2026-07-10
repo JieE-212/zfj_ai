@@ -1,140 +1,182 @@
 import { tool } from '@langchain/core/tools';
+import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
-// 判断路径的合法性 路径的拼接 ... 
-import path from 'node:path'; // node 内置的 path 模块
-import { spawn } from 'node:child_process'
+import path from 'node:path';
 import { z } from 'zod';
 
-// I/O 工具
-// 读文件
+const MAX_CAPTURED_OUTPUT = 20_000;
+
+function getWorkspaceRoot() {
+  return path.resolve(process.cwd());
+}
+
+function resolveWorkspacePath(inputPath = '.') {
+  const workspaceRoot = getWorkspaceRoot();
+  const resolvedPath = path.resolve(workspaceRoot, inputPath);
+  const relativePath = path.relative(workspaceRoot, resolvedPath);
+  const isOutsideWorkspace = relativePath === '..'
+    || relativePath.startsWith(`..${path.sep}`)
+    || path.isAbsolute(relativePath);
+
+  if (isOutsideWorkspace) {
+    throw new Error(`路径必须位于当前工作目录内：${workspaceRoot}`);
+  }
+
+  return resolvedPath;
+}
+
+function displayPath(resolvedPath) {
+  return path.relative(getWorkspaceRoot(), resolvedPath) || '.';
+}
+
+// 读取工作区内的 UTF-8 文本文件。
 const readFileTool = tool(
-  async ({ filePath }) => {   // 功能函数
-    const content = await fs.readFile(filePath, 'utf-8');
-    // 时刻反馈Agent 执行消息
-    // Agent 任务可能很复杂,很耗时，需要给用户反馈 用户可能
-    // 太久没有看到反馈， 退出
-    console.log(`[工具调用] read_file(${filePath})
-        成功读取 ${content.length} 字节`)
-    return content;
+  async ({ filePath }) => {
+    try {
+      const resolvedPath = resolveWorkspacePath(filePath);
+      const content = await fs.readFile(resolvedPath, 'utf-8');
+      console.log(`[工具调用] read_file(${displayPath(resolvedPath)})：成功读取 ${content.length} 个字符`);
+      return content;
+    } catch (error) {
+      return `读取文件失败：${error.message}`;
+    }
   },
   {
     name: 'read_file',
-    description: `用此工具来读取文件内容，当用户要求读取文件、
-        查看代码、分析文件内容时，调用此工具。输入文件路径（
-        可以是相对路径或绝对路径）`,
+    description: '读取当前工作目录内的 UTF-8 文本文件。filePath 可使用相对路径，例如 react-todo-app/src/App.tsx。',
     schema: z.object({
-      filePath: z.string().describe('要读取的文件路径')
-    })
-  }
-)
+      filePath: z.string().min(1).describe('工作区内的文件路径'),
+    }),
+  },
+);
 
-// 写文件
+// 写入工作区内的 UTF-8 文本文件，并按需创建父目录。
 const writeFileTool = tool(
-  // path 模块 专门的路径模块 Agent执行正确服务 
-  // path 路径  /src/all-tool.mjs 路径模块
   async ({ filePath, content }) => {
-    // 1. 确认路径是否在当前工作目录下
-    // 2. 写入文件， utf-8 
-    // 3. 容错处理
     try {
-      const dir = path.dirname(filePath);
-      console.log(dir, '目录');
-      //  已存在 目录不创建  
-      // 递归创建 /a/b/c/123.js
-      await fs.mkdir(dir, { recursive: true });
-      // 写入文件
-      await fs.writeFile(filePath, content, 'utf-8');
-      console.log(`[工具调用] write_file(${filePath})
-            成功写入 ${content.length} 字节`)
-      return `成功写入 ${filePath}`
-    } catch (err) {
-      console.log(`[工具调用] write_file(${filePath})
-            错误： ${err.message}`)
-      return `写入文件失败：${err.message}`
+      const resolvedPath = resolveWorkspacePath(filePath);
+      await fs.mkdir(path.dirname(resolvedPath), { recursive: true });
+      await fs.writeFile(resolvedPath, content, 'utf-8');
+      console.log(`[工具调用] write_file(${displayPath(resolvedPath)})：成功写入 ${content.length} 个字符`);
+      return `成功写入 ${displayPath(resolvedPath)}`;
+    } catch (error) {
+      return `写入文件失败：${error.message}`;
     }
   },
   {
     name: 'write_file',
-    description: '向指定路径写入文件内容，自动创建目录',
+    description: '向当前工作目录内的指定路径写入 UTF-8 内容，并自动创建父目录。',
     schema: z.object({
-      filePath: z.string().describe('文件路径'),
-      content: z.string().describe('要写入的文件内容')
-    })
-  }
-)
+      filePath: z.string().min(1).describe('工作区内的文件路径'),
+      content: z.string().describe('要写入的完整文件内容'),
+    }),
+  },
+);
 
-// 列出目录内容工具 
+// 列出工作区内的目录内容。
 const listDirectoryTool = tool(
-  async ({ directoryPath }) => {
-    // 后端以稳定为主 
+  async ({ directoryPath = '.' }) => {
     try {
-      // 列出目录下的所有文件和文件夹
-      const files = await fs.readdir(directoryPath);
-      console.log(`[工具调用] list_directory(${directoryPath})
-            成功列出 ${files.length} 个文件和文件夹`)
-      return `目录内容：\n ${files.map(file => file).join('\n')}`
-    } catch (err) {
-      console.log(`[工具调用] list_directory(${directoryPath})
-            错误： ${err.message}`)
-      return `列出目录内容失败：${err.message}`
+      const resolvedPath = resolveWorkspacePath(directoryPath);
+      const entries = await fs.readdir(resolvedPath, { withFileTypes: true });
+      const listing = entries
+        .sort((left, right) => left.name.localeCompare(right.name, 'zh-CN'))
+        .map((entry) => `${entry.isDirectory() ? '[目录]' : '[文件]'} ${entry.name}`)
+        .join('\n');
+
+      console.log(`[工具调用] list_directory(${displayPath(resolvedPath)})：成功列出 ${entries.length} 项`);
+      return `目录 ${displayPath(resolvedPath)} 的内容：\n${listing || '(空目录)'}`;
+    } catch (error) {
+      return `列出目录失败：${error.message}`;
     }
   },
   {
     name: 'list_directory',
-    description: '列出指定目录下的所有文件和文件夹',
+    description: '列出当前工作目录内指定目录的文件和文件夹。',
     schema: z.object({
-      directoryPath: z.string().describe('目录路径')
-    })
-  }
-)
+      directoryPath: z.string().optional().describe('工作区内的目录路径，默认是当前工作目录'),
+    }),
+  },
+);
 
-// 执行命令工具（带实时输出）
+// 执行命令。前台命令会把输出返回给 Agent；开发服务器可使用 background=true。
 const executeCommandTool = tool(
-  async ({ command, directoryPath }) => {
-    const cwd = directoryPath || process.cwd();
-    console.log(`[工具调用] execute_command(${command})
-        工作目录：${cwd}`);
-    return new Promise((resolve, reject) => {
-      const [cmd, ...args] = command.split(' ');
-      const child = spawn(cmd, args, {
-        cwd,
-        stdio: 'inherit',
-        shell: true,
-      })
-      let errorMsg = '';
-      child.on('error', (err) => {
-        errorMsg = err.message
-      });
-      child.on('close', (code) => {
-        if (code === 0) { // 运行顺利，成功退出
-          console.log(`[工具调用] execute_command(${command})
-                   成功执行`)
-          const cwdInfo = directoryPath ?
-            `\n\n重要提示：命令在目录”${directoryPath}” 执行`
-            : '';
-          resolve(`命令行成功执行 ${command}${cwdInfo}`);
-        } else {
-          console.log(`[工具调用] execute_command(${command})
-                    退出码：${code}`)
-          resolve(`命令执行失败，退出码：${code}\n 错误：${errorMsg}`)
-        }
-      })
-    })
+  async ({ command, workingDirectory = '.', background = false }) => {
+    let cwd;
+    try {
+      cwd = resolveWorkspacePath(workingDirectory);
+    } catch (error) {
+      return `命令执行失败：${error.message}`;
+    }
 
+    console.log(`[工具调用] execute_command(${command})\n工作目录：${cwd}${background ? '\n运行方式：后台' : ''}`);
+
+    return new Promise((resolve) => {
+      let settled = false;
+      let output = '';
+      const child = spawn(command, {
+        cwd,
+        shell: true,
+        windowsHide: true,
+        detached: background,
+        stdio: background ? 'ignore' : ['ignore', 'pipe', 'pipe'],
+      });
+
+      const finish = (message) => {
+        if (!settled) {
+          settled = true;
+          resolve(message);
+        }
+      };
+
+      if (background) {
+        child.once('spawn', () => {
+          child.unref();
+          finish(`命令已在后台启动：${command}\n工作目录：${displayPath(cwd)}\n进程 ID：${child.pid}`);
+        });
+        child.once('error', (error) => {
+          finish(`后台命令启动失败：${error.message}`);
+        });
+        return;
+      }
+
+      const collectOutput = (chunk, target) => {
+        const text = chunk.toString();
+        target.write(text);
+        if (output.length < MAX_CAPTURED_OUTPUT) {
+          output += text.slice(0, MAX_CAPTURED_OUTPUT - output.length);
+        }
+      };
+
+      child.stdout.on('data', (chunk) => collectOutput(chunk, process.stdout));
+      child.stderr.on('data', (chunk) => collectOutput(chunk, process.stderr));
+      child.once('error', (error) => {
+        finish(`命令执行失败：${error.message}`);
+      });
+      child.once('close', (code) => {
+        const outputBlock = output.trim() ? `\n输出：\n${output.trim()}` : '';
+        if (code === 0) {
+          finish(`命令执行成功：${command}\n工作目录：${displayPath(cwd)}${outputBlock}`);
+        } else {
+          finish(`命令执行失败，退出码：${code}\n命令：${command}\n工作目录：${displayPath(cwd)}${outputBlock}`);
+        }
+      });
+    });
   },
   {
     name: 'execute_command',
-    description: '执行系统命令，支持指定工作目录，实时显示输出',
+    description: '在工作区内的指定目录执行完整的 shell 命令。启动长期运行的开发服务器时必须设置 background=true。',
     schema: z.object({
-      command: z.string().describe('要执行的命令'),
-      directoryPath: z.string().describe('工作目录(推荐指定)')
-    })
-  }
-)
+      command: z.string().min(1).describe('要执行的完整命令'),
+      workingDirectory: z.string().optional().describe('工作区内的工作目录，默认是当前工作目录'),
+      background: z.boolean().optional().describe('长期运行的命令是否在后台启动，默认 false'),
+    }),
+  },
+);
 
 export {
+  executeCommandTool,
+  listDirectoryTool,
   readFileTool,
   writeFileTool,
-  listDirectoryTool,
-  executeCommandTool,
-}
+};

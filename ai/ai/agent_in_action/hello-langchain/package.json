@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "agent": "node src/mini-cursor.mjs",
+    "scaffold": "node src/node-exec.mjs",
+    "check": "node --check src/all-tools.mjs && node --check src/mini-cursor.mjs && node --check src/node-exec.mjs && node --check src/tool.mjs",
+    "test": "pnpm run check"
   },
   "keywords": [],
   "author": "",
