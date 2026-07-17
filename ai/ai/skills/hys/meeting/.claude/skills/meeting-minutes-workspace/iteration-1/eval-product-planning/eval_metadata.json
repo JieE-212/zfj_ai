@@ -1,0 +1,57 @@
+{
+  "eval_id": 1,
+  "eval_name": "eval-product-planning",
+  "prompt": "请根据以下会议文字稿生成会议纪要（Q3产品迭代计划讨论会）",
+  "assertions": [
+    {
+      "id": "p1_has_basic_info",
+      "description": "输出包含"会议基本信息/Meeting Basic Info"章节",
+      "check": "output_contains_section_meeting_basic_info"
+    },
+    {
+      "id": "p1_all_attendees",
+      "description": "正确识别全部4位参会人：刘总、赵PM、王工、小周",
+      "check": "output_mentions_all_attendees"
+    },
+    {
+      "id": "p1_three_topics",
+      "description": "识别出三个核心议题：Onboarding优化、搜索准确率提升、推送策略调整",
+      "check": "output_covers_three_topics"
+    },
+    {
+      "id": "p1_priority_decision",
+      "description": "捕获优先级排序决策：Onboarding > 搜索 > 推送",
+      "check": "output_captures_priority_order"
+    },
+    {
+      "id": "p1_action_items",
+      "description": "包含至少4个行动项，且每个行动项有负责人",
+      "check": "output_has_min_4_action_items_with_owners"
+    },
+    {
+      "id": "p1_retention_data",
+      "description": "记录了关键数据：七日留存率15%",
+      "check": "output_mentions_retention_rate_15"
+    },
+    {
+      "id": "p1_bilingual",
+      "description": "输出为中英双语（同时包含中文和英文内容）",
+      "check": "output_is_bilingual"
+    },
+    {
+      "id": "p1_no_fabrication",
+      "description": "不确定的信息（日期、地点、缺席人员等）留空而非编造",
+      "check": "output_leaves_unknown_fields_blank"
+    },
+    {
+      "id": "p1_markdown_format",
+      "description": "输出为规范的Markdown格式，包含表格",
+      "check": "output_uses_markdown_tables"
+    },
+    {
+      "id": "p1_no_filler_words",
+      "description": "清洗了口语冗余（嗯、啊、那个、对吧等）",
+      "check": "output_removes_filler_words"
+    }
+  ]
+}

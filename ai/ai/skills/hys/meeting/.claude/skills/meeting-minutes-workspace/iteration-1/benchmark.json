@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "skill_name": "meeting-minutes",
+    "skill_path": ".claude/skills/meeting-minutes",
+    "executor_model": "deepseek-v4-pro",
+    "timestamp": "2026-07-17T15:30:00Z",
+    "evals_run": ["eval-product-planning", "eval-marketing-sync", "eval-cloud-migration"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "Q3 产品迭代计划 / Product Planning",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 64.7,
+        "tokens": 18208,
+        "errors": 0
+      }
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "Q3 产品迭代计划 / Product Planning",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 25.0,
+        "tokens": 12415,
+        "errors": 0
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "市场营销周会 / Marketing Sync",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 57.4,
+        "tokens": 17117,
+        "errors": 0
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "市场营销周会 / Marketing Sync",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.9,
+        "passed": 9,
+        "failed": 1,
+        "total": 10,
+        "time_seconds": 47.9,
+        "tokens": 13879,
+        "errors": 0
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "云迁移复盘 / Cloud Migration",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 59.4,
+        "tokens": 17194,
+        "errors": 0
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "云迁移复盘 / Cloud Migration",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 38.2,
+        "tokens": 13373,
+        "errors": 0
+      }
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 60.5, "stddev": 3.1, "min": 57.4, "max": 64.7},
+      "tokens": {"mean": 17506, "stddev": 500, "min": 17117, "max": 18208}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.833, "stddev": 0.047, "min": 0.8, "max": 0.9},
+      "time_seconds": {"mean": 37.0, "stddev": 9.4, "min": 25.0, "max": 47.9},
+      "tokens": {"mean": 13222, "stddev": 611, "min": 12415, "max": 13879}
+    },
+    "delta": {
+      "pass_rate": "+0.167",
+      "time_seconds": "+23.5",
+      "tokens": "+4284"
+    }
+  },
+  "notes": [
+    "技能在三个测试用例中均达到 100% 通过率，基线为 80-90%",
+    "不带技能时主要缺失：'会议基本信息'结构章节（2/3），不确定信息留空标记（2/3），'行动项'章节（1/3）",
+    "技能平均增加 23.5 秒执行时间，但换来结构一致性和完整性",
+    "技能使输出结构统一：始终包含基本信息表、议题分组、行动项表、双语言对照",
+    "中英双语检查在两种配置下均通过——即使不带技能，模型也能做到双语输出",
+    "token 消耗增加约 32%（+4284），因为模板输出更长更完整"
+  ]
+}

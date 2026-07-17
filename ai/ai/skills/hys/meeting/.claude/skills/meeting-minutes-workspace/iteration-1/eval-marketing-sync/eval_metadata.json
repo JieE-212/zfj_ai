@@ -1,0 +1,57 @@
+{
+  "eval_id": 2,
+  "eval_name": "eval-marketing-sync",
+  "prompt": "请根据以下会议文字稿生成会议纪要（市场营销周同步会，中英混合）",
+  "assertions": [
+    {
+      "id": "m1_has_basic_info",
+      "description": "输出包含会议基本信息章节",
+      "check": "output_contains_section_meeting_basic_info"
+    },
+    {
+      "id": "m1_correct_attendees",
+      "description": "正确识别Emily为主持人，David和Lisa为参会人",
+      "check": "output_identifies_emily_david_lisa"
+    },
+    {
+      "id": "m1_three_agenda_items",
+      "description": "识别三个议程：双十一Campaign、11月社交媒体日历、Q4预算审核",
+      "check": "output_covers_three_agenda_items"
+    },
+    {
+      "id": "m1_budget_unconfirmed",
+      "description": "标注200万预算尚未获财务批准",
+      "check": "output_notes_budget_not_approved"
+    },
+    {
+      "id": "m1_influencer_cut_compromise",
+      "description": "捕获David对网红营销预算削减的异议及分阶段削减的折中方案",
+      "check": "output_captures_phased_influencer_cut"
+    },
+    {
+      "id": "m1_video_editor_need",
+      "description": "捕获Lisa需要借调2名视频编辑的需求",
+      "check": "output_mentions_video_editor_shortage"
+    },
+    {
+      "id": "m1_all_action_items",
+      "description": "覆盖全部行动项：David推设计公司、Lisa出视频简报、Emily联系品牌团队并更新预算",
+      "check": "output_covers_all_action_items"
+    },
+    {
+      "id": "m1_bilingual",
+      "description": "输出为中英双语",
+      "check": "output_is_bilingual"
+    },
+    {
+      "id": "m1_black_friday_sea",
+      "description": "记录了Black Friday东南亚市场试点决策",
+      "check": "output_mentions_black_friday_sea_pilot"
+    },
+    {
+      "id": "m1_oct25_deadline",
+      "description": "记录了10月25日视觉素材截止日期及初步版本的折中",
+      "check": "output_captures_oct25_visual_deadline"
+    }
+  ]
+}

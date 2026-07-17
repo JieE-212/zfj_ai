@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>杰哥AI日报 - 2026-07-17</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f0f4f8;
+    --card-bg: #ffffff;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --accent: #2b6cb0;
+    --accent-light: #ebf4ff;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-hover: 0 10px 25px rgba(0,0,0,0.10), 0 4px 10px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --transition: 0.2s ease;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a202c;
+      --card-bg: #2d3748;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --accent: #63b3ed;
+      --accent-light: #2a4365;
+      --border: #4a5568;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow-hover: 0 10px 25px rgba(0,0,0,0.4);
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 50%, #3182ce 100%);
+    color: #ffffff;
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                radial-gradient(circle at 70% 50%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    animation: shimmer 8s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(2%, -1%); }
+  }
+  .header-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+  .header-icon { font-size: 48px; margin-bottom: 12px; display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+  .header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: 0.02em; margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+  .header .date { font-size: 1rem; opacity: 0.85; font-weight: 500; letter-spacing: 0.05em; }
+  .header .subtitle { font-size: 0.9rem; opacity: 0.7; margin-top: 6px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px 48px; }
+
+  .stats-bar { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; justify-content: center; }
+  .stat-item {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 22px; text-align: center; box-shadow: var(--shadow); min-width: 90px;
+    transition: transform var(--transition);
+  }
+  .stat-item:hover { transform: translateY(-2px); }
+  .stat-item .stat-num { font-size: 1.6rem; font-weight: 800; color: var(--accent); line-height: 1.2; }
+  .stat-item .stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); gap: 20px; }
+
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--shadow);
+    transition: box-shadow var(--transition), transform var(--transition);
+    display: flex; flex-direction: column; position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%; background: var(--accent);
+    opacity: 0; transition: opacity var(--transition);
+  }
+  .card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+  .card:hover::before { opacity: 1; }
+
+  .card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .card-index {
+    flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent-light); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85rem; font-family: var(--font-mono);
+  }
+  .card-title { font-size: 1.08rem; font-weight: 700; line-height: 1.5; color: var(--text-primary); flex: 1; }
+  .card-summary { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px; flex: 1; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .card-tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: #fff; line-height: 1.5; white-space: nowrap; }
+  .card-tag:nth-child(7n+1) { background: #2b6cb0; }
+  .card-tag:nth-child(7n+2) { background: #c53030; }
+  .card-tag:nth-child(7n+3) { background: #2f855a; }
+  .card-tag:nth-child(7n+4) { background: #c05621; }
+  .card-tag:nth-child(7n+5) { background: #6b46c1; }
+  .card-tag:nth-child(7n+6) { background: #b83280; }
+  .card-tag:nth-child(7n+7) { background: #285e61; }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-muted); }
+  .card-source { display: flex; align-items: center; gap: 4px; }
+  .card-link {
+    color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.82rem;
+    display: inline-flex; align-items: center; gap: 4px; transition: gap var(--transition); white-space: nowrap;
+  }
+  .card-link:hover { gap: 6px; }
+  .card-link::after { content: '→'; }
+
+  .footer { text-align: center; padding: 32px 20px; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border); margin-top: 16px; }
+  .footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 560px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .header { padding: 36px 16px 28px; }
+    .container { padding: 20px 12px 32px; }
+  }
+
+  @media print {
+    .card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+    .header { background: #1a365d !important; -webkit-print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-content">
+    <span class="header-icon">🤖</span>
+    <h1>📰 杰哥AI日报</h1>
+    <div class="date">2026年7月17日 星期五</div>
+    <div class="subtitle">今日精选 8 条 AI 行业核心资讯</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">8</div>
+      <div class="stat-label">精选资讯</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">6</div>
+      <div class="stat-label">内容来源</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24</div>
+      <div class="stat-label">关键标签</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- 卡片 1 -->
+    <article class="card">
+      <div class="card-header">
+        <span class="card-index">#1</span>
+        <h2 class="card-title">Google Gemini 3.5 Pro 延迟发布，Alphabet 股价下跌 4%</h2>
+      </div>
+      <p class="card-summary">Google 最强大模型 Gemini 3.5 Pro 因代码能力未达内部预期而大幅延期。该模型原定于 5 月 Google I/O 亮相，现已落后数月。同期 OpenAI 和 Meta 的模型在代码生成上已超越 Google 当前水平，AI 竞赛格局再生变数。</p>
+      <div class="card-tags">
+        <span class="card-tag">Gemini</span>
+        <span class="card-tag">Google</span>
+        <span class="card-tag">大模型延期</span>
+        <span class="card-tag">股价波动</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-source">📰 CNBC</span>
+        <a class="card-link" href="https://www.cnbc.com/2026/07/16/alphabet-stock-gemini-3-5-pro-ai.html" target="_blank" rel="noopener">阅读原文</a>
+      </div>
+    </article>
+
+    <!-- 卡片 2 -->
+    <article class="card">
+      <div class="card-header">
+        <span class="card-index">#2</span>
+        <h2 class="card-title">Jensen Huang：AI 增长才刚起步，Nvidia 加码日本市场</h2>
+      </div>
+      <p class="card-summary">尽管科技股遭遇抛售潮，Nvidia CEO 黄仁勋坚称 AI 增长仍处于"起步阶段"，将其比作电力革命初期。Nvidia 同时向日本软银-索尼联合体出售 27,500 颗最新 Rubin AI 芯片用于机器人项目，并与川崎重工合作开发 AI 造船机器人。</p>
+      <div class="card-tags">
+        <span class="card-tag">Nvidia</span>
+        <span class="card-tag">黄仁勋</span>
+        <span class="card-tag">AI芯片</span>
+        <span class="card-tag">机器人</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-source">📰 The Korea Times</span>
+        <a class="card-link" href="https://www.koreatimes.co.kr/world/20260716/nvidias-huang-says-ai-growth-at-beginning-despite-tech-rout" target="_blank" rel="noopener">阅读原文</a>
+      </div>
+    </article>
+
+    <!-- 卡片 3 -->
+    <article class="card">
+      <div class="card-header">
+        <span class="card-index">#3</span>
+        <h2 class="card-title">Meta 挖角 OpenAI 核心人才：ChatGPT 联合创造者执掌超智能实验室</h2>
+      </div>
+      <p class="card-summary">Meta 任命 ChatGPT/GPT-4 关键架构师 Shengjia Zhao 为 AI 超智能实验室首席科学家，以开源路线冲击"完整通用智能"。近期 Meta 以高达 1 亿美元签约奖金从 OpenAI 挖走至少 8 名核心研究员，OpenAI 研究主管直斥"如同入室抢劫"。</p>
+      <div class="card-tags">
+        <span class="card-tag">Meta</span>
+        <span class="card-tag">人才争夺</span>
+        <span class="card-tag">OpenAI</span>
+        <span class="card-tag">超智能</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-source">📰 YourStory</span>
+        <a class="card-link" href="https://yourstory.com/ai-story/meta-appoints-chatgpt-co-creator-shengjia-zhao-ai-superintelligence-lab" target="_blank" rel="noopener">阅读原文</a>
+      </div>
+    </article>
+
+    <!-- 卡片 4 -->
+    <article class="card">
+      <div class="card-header">
+        <span class="card-index">#4</span>
+        <h2 class="card-title">2026 世界人工智能大会今日上海开幕，规模创纪录</h2>
+      </div>
+      <p class="card-summary">WAIC 2026（世界人工智能大会）于 7 月 17-20 日在上海举办，规模创历史新高。大会聚焦大模型落地、具身智能、AI 治理等议题，全球头部 AI 公司悉数参展。本届大会也是观察中国 AI 产业政策风向的重要窗口。</p>
+      <div class="card-tags">
+        <span class="card-tag">WAIC</span>
+        <span class="card-tag">上海</span>
+        <span class="card-tag">AI大会</span>
+        <span class="card-tag">中国AI</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-source">📰 People's Daily</span>
+        <a class="card-link" href="https://peoplesdaily.pdnews.cn/china/er/30052604912" target="_blank" rel="noopener">阅读原文</a>
+      </div>
+    </article>
+
+    <!-- 卡片 5 -->
+    <article class="card">
+      <div class="card-header">
+        <span class="card-index">#5</span>
+        <h2 class="card-title">OpenAI 与迪士尼达成 10 亿美元合作，漫威/皮克斯角色入驻 Sora</h2>
+      </div>
+      <p class="card-summary">OpenAI 与迪士尼签署三年授权协议，迪士尼投资 10 亿美元。Sora 视频生成器和 ChatGPT Images 可使用 200+ 迪士尼/漫威/皮克斯/星球大战角色创作内容，AI 生成视频预计 2026 年初登陆 Disney+，标志着 AI+IP 商业化的里程碑式合作。</p>
+      <div class="card-tags">
+        <span class="card-tag">OpenAI</span>
+        <span class="card-tag">迪士尼</span>
+        <span class="card-tag">Sora</span>
+        <span class="card-tag">AI+IP</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-source">📰 The Verge</span>
+        <a class="card-link" href="https://www.theverge.com/news/842348/disney-openai-sora-chatgpt-images" target="_blank" rel="noopener">阅读原文</a>
+      </div>
+    </article>
+
+    <!-- 卡片 6 -->
+    <article class="card">
+      <div class="card-header">
+        <span class="card-index">#6</span>
+        <h2 class="card-title">AI 公司集体抛弃"AGI"标签，发明新词汇重塑叙事</h2>
+      </div>
+      <p class="card-summary">主流 AI 公司正大规模抛弃"AGI"（通用人工智能）一词。Meta 改用"个人超智能"，微软提出"人本超智能"，亚马逊用"有用通用智能"，Anthropic 偏好"强大 AI"。这一转变源于微软-OpenAI 合同条款压力以及公众对 AGI 概念的恐惧情绪。</p>
+      <div class="card-tags">
+        <span class="card-tag">AGI</span>
+        <span class="card-tag">品牌重塑</span>
+        <span class="card-tag">行业趋势</span>
+        <span class="card-tag">话语权</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-source">📰 The Verge</span>
+        <a class="card-link" href="https://www.theverge.com/ai-artificial-intelligence/845890/ai-companies-rebrand-agi-artificial-general-intelligence" target="_blank" rel="noopener">阅读原文</a>
+      </div>
+    </article>
+
+    <!-- 卡片 7 -->
+    <article class="card">
+      <div class="card-header">
+        <span class="card-index">#7</span>
+        <h2 class="card-title">加州成为全美首个立法监管 AI 陪伴机器人的州</h2>
+      </div>
+      <p class="card-summary">加州通过 SB 243 法案（2026年1月生效），成为美国首个监管 AI 陪伴聊天机器人的州。法规要求年龄验证、自杀/自残干预协议、明确 AI 身份声明以及未成年人使用时长提醒。此举直接回应了青少年因与 ChatGPT 和 Character AI 互动而自杀的悲剧事件。</p>
+      <div class="card-tags">
+        <span class="card-tag">AI监管</span>
+        <span class="card-tag">加州</span>
+        <span class="card-tag">安全</span>
+        <span class="card-tag">立法</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-source">📰 TechCrunch</span>
+        <a class="card-link" href="https://techcrunch.com/2025/10/13/california-becomes-first-state-to-regulate-ai-companion-chatbots/" target="_blank" rel="noopener">阅读原文</a>
+      </div>
+    </article>
+
+    <!-- 卡片 8 -->
+    <article class="card">
+      <div class="card-header">
+        <span class="card-index">#8</span>
+        <h2 class="card-title">Meta 2025 年 AI 基础设施投入高达 720 亿美元，算力军备竞赛升级</h2>
+      </div>
+      <p class="card-summary">Meta 计划 2025 年投入 660-720 亿美元用于 AI 基础设施，同比翻倍。核心项目包括俄亥俄州 Prometheus 超算集群（约 1GW）和路易斯安那州 Hyperion（潜在 5GW）。但扎克伯格内部承认 AI Agent 进展"过去四个月未如预期加速"，引发算力过剩疑虑。</p>
+      <div class="card-tags">
+        <span class="card-tag">Meta</span>
+        <span class="card-tag">基础设施</span>
+        <span class="card-tag">算力竞赛</span>
+        <span class="card-tag">数据中心</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-source">📰 TechCrunch</span>
+        <a class="card-link" href="https://techcrunch.com/2025/07/30/meta-to-spend-up-to-72b-on-ai-infrastructure-in-2025-as-compute-arms-race-escalates/" target="_blank" rel="noopener">阅读原文</a>
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <p>📡 数据来源：CNBC · The Verge · TechCrunch · The Korea Times · YourStory · People's Daily</p>
+  <p>⏰ 生成时间：2026年7月17日 | 由 <strong>杰哥AI日报</strong> 自动生成 | 每卡可点击查看原文</p>
+</footer>
+
+</body>
+</html>

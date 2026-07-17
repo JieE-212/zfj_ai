@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>杰哥AI日报 - {{DATE}}</title>
+<style>
+  /* ===== 基础重置 ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ===== CSS 变量 ===== */
+  :root {
+    --bg: #f0f4f8;
+    --card-bg: #ffffff;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --accent: #2b6cb0;
+    --accent-light: #ebf4ff;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-hover: 0 10px 25px rgba(0,0,0,0.10), 0 4px 10px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --transition: 0.2s ease;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    --tag-colors: #2b6cb0 #c53030 #2f855a #c05621 #6b46c1 #b83280 #285e61;
+  }
+
+  /* ===== 深色模式 ===== */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a202c;
+      --card-bg: #2d3748;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --accent: #63b3ed;
+      --accent-light: #2a4365;
+      --border: #4a5568;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow-hover: 0 10px 25px rgba(0,0,0,0.4);
+    }
+  }
+
+  /* ===== 全局 ===== */
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ===== 头部 ===== */
+  .header {
+    background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 50%, #3182ce 100%);
+    color: #ffffff;
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                radial-gradient(circle at 70% 50%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    animation: headerShimmer 8s ease-in-out infinite;
+  }
+  @keyframes headerShimmer {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(2%, -1%); }
+  }
+  .header-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .header-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+  .header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .header .date {
+    font-size: 1rem;
+    opacity: 0.85;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .header .subtitle {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-top: 6px;
+  }
+
+  /* ===== 主内容区 ===== */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+  }
+
+  /* ===== 统计栏 ===== */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    justify-content: center;
+  }
+  .stat-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 22px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    min-width: 90px;
+    transition: transform var(--transition);
+  }
+  .stat-item:hover { transform: translateY(-2px); }
+  .stat-item .stat-num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+  .stat-item .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ===== 卡片网格 ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 20px;
+  }
+  @media (max-width: 560px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .header { padding: 36px 16px 28px; }
+    .container { padding: 20px 12px 32px; }
+  }
+
+  /* ===== 单张卡片 ===== */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    transition: box-shadow var(--transition), transform var(--transition);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+  .card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .card-index {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--accent-light);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+  }
+  .card-title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--text-primary);
+    flex: 1;
+  }
+  .card-summary {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    flex: 1;
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .card-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+  /* 标签颜色通过 JS 内联 style 或 nth-child 轮换 */
+  .card-tag:nth-child(7n+1) { background: #2b6cb0; }
+  .card-tag:nth-child(7n+2) { background: #c53030; }
+  .card-tag:nth-child(7n+3) { background: #2f855a; }
+  .card-tag:nth-child(7n+4) { background: #c05621; }
+  .card-tag:nth-child(7n+5) { background: #6b46c1; }
+  .card-tag:nth-child(7n+6) { background: #b83280; }
+  .card-tag:nth-child(7n+7) { background: #285e61; }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .card-source {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card-source-icon {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    background: var(--accent-light);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .card-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.82rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: gap var(--transition);
+    white-space: nowrap;
+  }
+  .card-link:hover { gap: 6px; }
+  .card-link::after { content: '→'; }
+
+  /* ===== 页脚 ===== */
+  .footer {
+    text-align: center;
+    padding: 32px 20px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* ===== 打印样式 ===== */
+  @media print {
+    .card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+    .header { background: #1a365d !important; -webkit-print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 头部 ===== -->
+<header class="header">
+  <div class="header-content">
+    <span class="header-icon">🤖</span>
+    <h1>📰 杰哥AI日报</h1>
+    <div class="date">{{DATE_DISPLAY}}</div>
+    <div class="subtitle">今日精选 {{COUNT}} 条 AI 行业核心资讯</div>
+  </div>
+</header>
+
+<!-- ===== 主内容 ===== -->
+<div class="container">
+
+  <!-- 统计栏 -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">{{COUNT}}</div>
+      <div class="stat-label">精选资讯</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">{{SOURCE_COUNT}}</div>
+      <div class="stat-label">内容来源</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">{{TAG_COUNT}}</div>
+      <div class="stat-label">关键标签</div>
+    </div>
+  </div>
+
+  <!-- 卡片列表 -->
+  <div class="cards-grid">
+    {{CARDS}}
+  </div>
+
+</div>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+  <p>数据来源：TechCrunch · The Verge · Hacker News 等权威科技媒体</p>
+  <p>生成时间：{{GENERATED_AT}} | 由 <strong>杰哥AI日报</strong> 自动生成</p>
+</footer>
+
+</body>
+</html>

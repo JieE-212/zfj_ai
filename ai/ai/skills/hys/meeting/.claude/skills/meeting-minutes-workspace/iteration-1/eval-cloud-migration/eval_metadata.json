@@ -1,0 +1,57 @@
+{
+  "eval_id": 3,
+  "eval_name": "eval-cloud-migration",
+  "prompt": "请帮我把这段会议录音转写整理成会议纪要（云迁移项目复盘会）",
+  "assertions": [
+    {
+      "id": "c1_has_basic_info",
+      "description": "输出包含会议基本信息章节",
+      "check": "output_contains_section_meeting_basic_info"
+    },
+    {
+      "id": "c1_project_delay",
+      "description": "记录了项目已延期两周、完成度60%的关键状态",
+      "check": "output_mentions_2_week_delay_60_percent"
+    },
+    {
+      "id": "c1_stored_proc_data",
+      "description": "记录了存储过程关键数据：200+个总数，约50个实际在用",
+      "check": "output_mentions_stored_proc_counts"
+    },
+    {
+      "id": "c1_monitoring_decision",
+      "description": "捕获存储过程监控脚本方案：从两周改为一个月",
+      "check": "output_captures_monitoring_script_1_month"
+    },
+    {
+      "id": "c1_data_comparison_tool",
+      "description": "记录数据对比工具分工：李明负责，一周完成，覆盖30张核心表",
+      "check": "output_captures_data_comparison_assignment"
+    },
+    {
+      "id": "c1_monitoring_solution",
+      "description": "记录运维监控方案未定：CloudMonitor（15万/年）vs Zabbix（免费但维护成本高），赵强需出对比方案",
+      "check": "output_captures_monitoring_comparison_needed"
+    },
+    {
+      "id": "c1_downtime_window",
+      "description": "记录停机窗口变更：从8小时变为12小时，需张鹏与业务重新确认",
+      "check": "output_mentions_downtime_window_change"
+    },
+    {
+      "id": "c1_next_meeting",
+      "description": "记录下次会议时间为下周一同一时间",
+      "check": "output_mentions_next_meeting_monday"
+    },
+    {
+      "id": "c1_bilingual",
+      "description": "输出为中英双语",
+      "check": "output_is_bilingual"
+    },
+    {
+      "id": "c1_no_fabrication",
+      "description": "未提及的信息留空不编造",
+      "check": "output_leaves_unknown_fields_blank"
+    }
+  ]
+}
