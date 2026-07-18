@@ -15,13 +15,12 @@ const stream = ref(true)
 
 const update = async() => {
   if(!question.value) return
-  content.value = '思考中'//页面状态 开始llm 接口调用
-  const endpoint = 'https://api.deepseek.com/chat/completions'; 
-  const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY}` };
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
+  content.value = '思考中'
+  try {
+    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY}` },
+      body: JSON.stringify({
       model: 'deepseek-v4-flash',
       messages: [
         { role: 'user', content: question.value }
@@ -44,29 +43,60 @@ const update = async() => {
     // 二进制流服务 解码器
     const decoder = new TextDecoder();//二进制流服务
     let done = false;//是否读取完成
-    let buffer = '';//缓存区
+    let buffer = '';//缓存区 截断准备了 上一次JSON.parse() 失败的
+    // 不完整json completion
 
     // 读取数据
     while(!done) {
-      const { value, done } = await reader.read();
-
+      // 嘬一口， 嘬到了resolve， 没嘬到， 继续等
+      // data: [Done]
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
       //除了把本轮的value处理之外 之前会有东西要一起处理
       // 所以要缓存起来
       //chunk 一小块数据 json格式
       // delta 偏移量 一小块一小块 的增量
       //解析json字符串 choices[0].delta.content
-
+      // json 断开的可能 动态 buffer 不一定有值
+      // 如果有，上一个chunk 最后一行，不完整的json
       const chunkValue = buffer + decoder.decode(value);
-      buffer = ''
+      // console.log(chunkValue);
+      buffer = ''; // 上一次的已经拼到这一次来了，buffer 任务完成了
       //json 字符串 多行数据
       // data：数据来了
       // 一次发送一行，也可能发送多行
-      const lines = chunkValue.split('\n').filter((line) => line.startsWith('data:'))
+      const lines = chunkValue.split('\n')
+      // 严谨性  \n 不止一个 也可能有多个
+        .filter((line) => line.startsWith('data:'))
+
+      for (const line of lines) {
+        // data:
+        const incoming = line.slice(6); // 切掉申明头
+        if (incoming === '[Done]') {
+          done = true;
+          break;
+        }
+        // 解析 content json 字符串
+        try {
+          const data = JSON.parse(incoming);
+          const delta = data.choices[0].delta.content;
+          if (data && delta) {
+            content.value += delta;
+          }
+        } catch(err) {
+          // 不完整的 json，缓存起来等下一轮拼
+          buffer = `data: ${incoming}`;
+        }
+      }
 
     }
   }else{
     const data = await response.json();
     content.value = data.choices[0].message.content;
+  }
+  } catch(err) {
+    content.value = `请求失败：${err.message}`;
+    console.error(err);
   }
 }
 
