@@ -17,14 +17,18 @@ function App() {
   // null 初始值，loading 加载中 ready llm准备好了
   const [status, setStatus] = useState(null); // 响应式数据状态
   // 错误对象数据状态
-  // const [error, setError] = useState(null);
-  const [error, setError] = useState('出错了');
+  const [error, setError] = useState(null);
+  // const [error, setError] = useState('出错了');
   // 加载信息
-  const [loadingMessage, setLoadingMessage] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState("开始加载");
   const [progressItems, setProgressItems] = useState([{
-    file: 'model.onnx',
-    progress: 0,
+    text: 'model.onnx',
+    percentage: 0,
     total: 34353543453
+  }, {
+    text: 'model2.onnx',
+    percentage: 10,
+    total: 14353543453
   }]);
   // 浏览器 导航栏 是否支持 WebGPU
   // 现代浏览器的重要特性
@@ -111,8 +115,41 @@ function App() {
               </div>
             )
           }
+          {/* 
+          vue 添加事件 @click 
+          react 添加事件 onClick 不要去另外发明 大佬骄傲
+          HuggingFace 社区下载 开源模型 model-id */}
+          <button
+            className="border px-4 py-2 rounded-lg bg-blue-400
+          text-white hover:bg-blue-500 disabled:cursor-not-allowed
+          select-none"
+            disabled={status !== null || error !== null}
+            onClick={() => {
+              setStatus("loading");
+            }}>Load Model</button>
         </div>
       </div>
+      {
+        // loading 状态 llm 下载 文件数组 驱动下载进度条 
+        status === "loading" && (
+          <div className="w-full max-w-[500px] text-left mx-auto p-4 bottom-0 mt-auto">
+            <p className="text-center mb-1">{loadingMessage}</p>
+            {
+              // 循环输出  react 用了原生js
+              progressItems.map(({ text, percentage, total }, i) => (
+                // 组件函数可以以自定义标签的方式，类html插入
+                // 开关标签的 xml
+                // 自闭和标签
+                // App 的子组件
+                <progress
+                  text={text}
+                  percentage={percentage}
+                  total={total}
+                />
+              ))
+            }
+          </div>
+        )}
     </div>) : (
       <div>您的浏览器还不支持WebGPU</div>
     )
