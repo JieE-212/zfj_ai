@@ -141,7 +141,8 @@ function App() {
                 // 开关标签的 xml
                 // 自闭和标签
                 // App 的子组件
-                <progress
+                <Progress
+                  key={i}
                   text={text}
                   percentage={percentage}
                   total={total}
