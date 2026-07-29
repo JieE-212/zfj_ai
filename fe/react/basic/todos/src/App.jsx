@@ -7,6 +7,14 @@ import TodoList from "./components/TodoList";
 import TodoStats from "./components/TodoStats";
 import './App.css';
 
+const Demo = () => {
+  return (
+    <>
+      Demo
+    </>
+  )
+}
+
 const App = () => {
   const [count, setCount] = useState(0);
   const [todos, setTodos] = useState(() => {
@@ -82,6 +90,7 @@ const App = () => {
     <div>
       Count: {count}
       <button onClick={countBy}>count++</button>
+      {count % 2 === 0 && <Demo />}
       <h1>My Todo List</h1>
       {/* 自定义事件，   */}
       <TodoInput onAdd={addTodo} />
