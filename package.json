@@ -5,6 +5,7 @@
 		"@langchain/openai": "^1.5.5",
 		"@modelcontextprotocol/sdk": "^1.29.0",
 		"@tailwindcss/vite": "^4.3.3",
+		"@zilliz/milvus2-sdk-node": "^3.0.3",
 		"dotenv": "^17.4.2",
 		"tailwindcss": "^4.3.3",
 		"vite": "^8.1.5",

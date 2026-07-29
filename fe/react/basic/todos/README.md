@@ -25,3 +25,15 @@
   提出修改
   )的数据状态。
   数据和界面统一的，不能出问题。
+
+## 前端本地存储
+- 浏览器 有区间 存内容
+  - 浏览器缓存静态资源，
+  - localStorage key:value 配置、关键数据  5M 左右
+    - setItem(key, 字符串 JSON.stringify(obj))
+    - getItem(key)
+  - 前端也有类Mysql 数据库  存更多数据
+  IndexDB
+
+## useEffect
+- 生命周期
