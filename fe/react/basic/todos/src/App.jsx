@@ -8,6 +8,15 @@ import TodoStats from "./components/TodoStats";
 import './App.css';
 
 const Demo = () => {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('interval, is here');
+    }, 1000);
+    return () => {
+      console.log('组件卸载前执行, 做什么内存清理工作');
+      clearInterval(interval);
+    }
+  }, [])
   return (
     <>
       Demo
@@ -18,7 +27,7 @@ const Demo = () => {
 const App = () => {
   const [count, setCount] = useState(0);
   const [todos, setTodos] = useState(() => {
-    return JSON.parse(localStorage.getItem('todos'))
+    return JSON.parse(localStorage.getItem('todos')) || []
   })
   // 副作用 生命周期
   useEffect(() => {
